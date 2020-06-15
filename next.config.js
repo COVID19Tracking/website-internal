@@ -1,11 +1,11 @@
-const withSass = require("@zeit/next-sass");
-const withLess = require("@zeit/next-less");
+const withSass = require('@zeit/next-sass')
+const withLess = require('@zeit/next-less')
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === 'production'
 
 // fix: prevents error when .less files are required by node
-if (typeof require !== "undefined") {
-  require.extensions[".less"] = (file) => {};
+if (typeof require !== 'undefined') {
+  require.extensions['.less'] = (file) => {}
 }
 
 module.exports = withLess(
@@ -13,5 +13,6 @@ module.exports = withLess(
     lessLoaderOptions: {
       javascriptEnabled: true,
     },
-  })
-);
+    target: 'serverless',
+  }),
+)

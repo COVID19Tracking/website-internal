@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "postbuild": "next-on-netlify",
     "setup": "rm -rf _api || true && git clone --depth 1 https://github.com/COVID19Tracking/covid-public-api.git _api && rm -rf _api/.git"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "antd": "^4.3.3",
     "less": "^3.11.3",
     "next": "9.4.4",
+    "next-on-netlify": "^2.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   }
