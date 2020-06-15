@@ -123,7 +123,7 @@ const History = ({ history }) => (
     })}
     columns={columns}
     pagination={false}
-    scroll={{ x: 2300 }}
+    scroll={{ x: 2300, y: 900 }}
   />
 )
 
@@ -177,9 +177,15 @@ export default () => {
             </Col>
             <Col span={20}>
               <Card style={{ marginBottom: '2rem' }}>
-                <div
-                  dangerouslySetInnerHTML={{ __html: marked(stateInfo.notes) }}
-                />
+                {stateInfo.notes ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: marked(stateInfo.notes),
+                    }}
+                  />
+                ) : (
+                  <>No notes</>
+                )}
               </Card>
             </Col>
           </Row>
