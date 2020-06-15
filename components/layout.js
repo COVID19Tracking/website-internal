@@ -12,6 +12,7 @@ export default ({ title, children }) => (
     <Sider id="sidebar">
       <img src="/logo.svg" alt="Covid tracking project" />
       <Dropdown
+        trigger={['click']}
         overlay={
           <Menu>
             <Menu.Item>
