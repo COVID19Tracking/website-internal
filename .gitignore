@@ -30,3 +30,5 @@ yarn-error.log*
 .env.production.local
 
 _api
+out_functions
+out_publish
