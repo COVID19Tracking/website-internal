@@ -17,7 +17,7 @@ export default ({ title, children }) => (
           overlay={
             <Menu>
               <Menu.Item>
-                <Link href="website/history">
+                <Link href="/website/history">
                   <a>CTP website history</a>
                 </Link>
               </Menu.Item>
