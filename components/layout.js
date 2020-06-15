@@ -1,17 +1,24 @@
-import { Layout, Menu } from "antd";
-import Link from "next/link";
+import { Layout, Menu } from 'antd'
+import Link from 'next/link'
+import states from '../_api/v1/states/info.json'
 
-const { SubMenu } = Menu;
-const { Header, Footer, Sider, Content } = Layout;
+const { SubMenu } = Menu
+const { Header, Footer, Sider, Content } = Layout
 
 export default ({ title, children }) => (
   <Layout>
-    <Sider>
+    <Sider id="sidebar">
+      <img src="/logo.svg" alt="Covid tracking project" />
       <Menu>
-        <Menu.Item>Menu</Menu.Item>
-        <Menu.Item>
-          <Link href="/two">Two</Link>
-        </Menu.Item>
+        {states
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .map((state) => (
+            <Menu.Item key={state.state}>
+              <Link href={`/state/${state.state.toLowerCase()}`}>
+                <a>{state.name}</a>
+              </Link>
+            </Menu.Item>
+          ))}
       </Menu>
     </Sider>
     <Layout>
@@ -27,4 +34,4 @@ export default ({ title, children }) => (
       </Content>
     </Layout>
   </Layout>
-);
+)
