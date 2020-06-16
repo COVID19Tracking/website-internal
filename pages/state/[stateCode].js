@@ -1,17 +1,27 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Typography, Card, Spin, Space, Table, Col, Row, Statistic } from 'antd'
+import {
+  Typography,
+  Button,
+  Card,
+  Spin,
+  Space,
+  Table,
+  Col,
+  Row,
+  Tag,
+  Statistic,
+} from 'antd'
 import { DateTime } from 'luxon'
 import Layout from '../../components/layout'
 import marked from 'marked'
-import openApi from '../../_api/v1/openapi.json'
 
 const { Title } = Typography
 
 const columns = [
   {
     title: 'Date',
-    dataIndex: 'date',
+    dataIndex: 'formattedDate',
     width: 100,
     fixed: 'left',
   },
@@ -110,22 +120,110 @@ const columns = [
   return item
 })
 
-const History = ({ history }) => (
-  <Table
-    dataSource={history.map((row) => {
-      row.date = DateTime.fromISO(row.date).toFormat('ccc LLL d yyyy')
-      Object.keys(row).forEach((field) => {
-        if (typeof row[field] === 'number') {
-          row[field] = row[field].toLocaleString()
-        }
+const History = ({ history, state }) => {
+  const [tableData, setTableData] = useState(false)
+  const [preview, setPreview] = useState(false)
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false)
+
+  const loadPreview = () => {
+    fetch(`/api/state/preview?state=${state.toLowerCase()}`)
+      .then((response) => response.json())
+      .then((result) => {
+        setPreview(result)
+        setIsLoadingPreview(false)
+        setTableData(
+          history.map((historyRow) => {
+            const row = { ...historyRow }
+            row.formattedDate = DateTime.fromISO(row.date).toFormat(
+              'ccc LLL d yyyy',
+            )
+            const previewRow = result
+              .filter(
+                (previewRow) =>
+                  parseInt(previewRow.date, 10) === parseInt(row.date, 10),
+              )
+              .pop()
+
+            if (previewRow) {
+              row.formattedDate = (
+                <>
+                  {row.formattedDate}
+                  <Tag>Batch {previewRow.batchId}</Tag>
+                </>
+              )
+              Object.keys(previewRow).forEach((key) => {
+                if (
+                  typeof row[key] !== 'undefined' &&
+                  typeof row[key] === 'number' &&
+                  parseInt(row[key], 10) !== parseInt(previewRow[key], 10)
+                ) {
+                  row[key] = (
+                    <>
+                      {row[key].toLocaleString()}
+                      <Tag color="volcano">
+                        {previewRow[key].toLocaleString()}
+                      </Tag>
+                    </>
+                  )
+                  return
+                }
+                if (typeof row[key] === 'number') {
+                  row[key] = row[key].toLocaleString()
+                }
+              })
+            }
+            return row
+          }),
+        )
       })
-      return row
-    })}
-    columns={columns}
-    pagination={false}
-    scroll={{ x: 2300, y: 900 }}
-  />
-)
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
+  useEffect(() => {
+    setTableData(
+      history.map((historyRow) => {
+        const row = { ...historyRow }
+        row.formattedDate = DateTime.fromISO(row.date).toFormat(
+          'ccc LLL d yyyy',
+        )
+        Object.keys(row).forEach((key) => {
+          if (typeof row[key] === 'number') {
+            row[key] = row[key].toLocaleString()
+          }
+        })
+        return row
+      }),
+    )
+  }, [])
+
+  return (
+    <>
+      <p>
+        <Button
+          onClick={(event) => {
+            event.preventDefault()
+            setIsLoadingPreview(true)
+            loadPreview()
+          }}
+          loading={isLoadingPreview}
+          disabled={preview !== false}
+        >
+          {preview ? 'Preview data loaded' : 'Load preview data'}
+        </Button>
+      </p>
+      {tableData && (
+        <Table
+          dataSource={tableData}
+          columns={columns}
+          pagination={false}
+          scroll={{ x: 2300, y: 900 }}
+        />
+      )}
+    </>
+  )
+}
 
 export default () => {
   const [stateInfo, setStateInfo] = useState(false)
@@ -193,7 +291,7 @@ export default () => {
       )}
       <Card title="History">
         {history ? (
-          <History history={history} />
+          <History history={history} state={stateCode} />
         ) : (
           <Space size="middle">
             <Spin size="large" />

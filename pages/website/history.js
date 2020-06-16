@@ -30,9 +30,11 @@ const History = ({ history }) => (
           View
         </a>
       )
-      item.time = DateTime.fromISO(item.time)
-        .setZone('America/New_York')
-        .toFormat('ccc LLL d yyyy h:mm a')
+      if (item.time) {
+        item.time = DateTime.fromISO(item.time)
+          .setZone('America/New_York')
+          .toFormat('ccc LLL d yyyy h:mm a')
+      }
       return item
     })}
     columns={columns}

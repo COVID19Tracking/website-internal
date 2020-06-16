@@ -19,6 +19,7 @@
     "netlify": "^4.3.1",
     "next": "9.4.4",
     "next-on-netlify": "^2.1.0",
+    "node-fetch": "^2.6.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   }
