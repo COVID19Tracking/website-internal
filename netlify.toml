@@ -4,7 +4,7 @@
   publish   = "out_publish"
 
 [[redirects]]
-  from="/state/*"
+  from="/api/*"
   status = 200
   force = true
   conditions = {Role = ["user"]}
