@@ -172,6 +172,23 @@ const Screenshots = ({ screenshots }) => {
   )
 }
 
+const APIpreview = ({ date, state }) => (
+  <>
+    <Divider orientation="left">API data</Divider>
+    <a
+      href={`https://covidtracking.com/api/v1/states/${state.toLowerCase()}/${date}.json`}
+    >
+      JSON
+    </a>{' '}
+    |
+    <a
+      href={`https://covidtracking.com/api/v1/states/${state.toLowerCase()}/${date}.csv`}
+    >
+      CSV
+    </a>
+  </>
+)
+
 const History = ({ history, screenshots, state }) => {
   const [tableData, setTableData] = useState(false)
   const [preview, setPreview] = useState(false)
@@ -284,13 +301,16 @@ const History = ({ history, screenshots, state }) => {
           expandable={{
             expandedRowRender: (record) => {
               return (
-                <Screenshots
-                  screenshots={screenshots.filter(
-                    (screenshot) =>
-                      parseInt(screenshot.date, 10) ===
-                      parseInt(record.date, 10),
-                  )}
-                />
+                <>
+                  <Screenshots
+                    screenshots={screenshots.filter(
+                      (screenshot) =>
+                        parseInt(screenshot.date, 10) ===
+                        parseInt(record.date, 10),
+                    )}
+                  />
+                  <APIpreview date={record.date} state={record.state} />
+                </>
               )
             },
             rowExpandable: (record) => true,
