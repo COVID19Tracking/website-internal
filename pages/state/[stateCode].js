@@ -124,6 +124,7 @@ const History = ({ history, state }) => {
   const [tableData, setTableData] = useState(false)
   const [preview, setPreview] = useState(false)
   const [isLoadingPreview, setIsLoadingPreview] = useState(false)
+  const [changedRows, setChangedRows] = useState([])
 
   const loadPreview = () => {
     fetch(`/api/state/preview?state=${state.toLowerCase()}`)
@@ -157,6 +158,9 @@ const History = ({ history, state }) => {
                   typeof row[key] === 'number' &&
                   parseInt(row[key], 10) !== parseInt(previewRow[key], 10)
                 ) {
+                  if (changedRows.indexOf(row.date) > -1) {
+                    changedRows.push(row.date)
+                  }
                   row[key] = (
                     <>
                       {row[key].toLocaleString()}
@@ -167,6 +171,8 @@ const History = ({ history, state }) => {
                   )
                   return
                 }
+              })
+              Object.keys(row).forEach((key) => {
                 if (typeof row[key] === 'number') {
                   row[key] = row[key].toLocaleString()
                 }
@@ -175,6 +181,7 @@ const History = ({ history, state }) => {
             return row
           }),
         )
+        setChangedRows(changedRows)
       })
       .catch((e) => {
         console.log(e)
@@ -212,6 +219,9 @@ const History = ({ history, state }) => {
         >
           {preview ? 'Preview data loaded' : 'Load preview data'}
         </Button>
+        {changedRows.length > 0 && (
+          <>There are {changedRows.length} rows with changes.</>
+        )}
       </p>
       {tableData && (
         <Table
