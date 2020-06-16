@@ -11,6 +11,7 @@ import {
   Row,
   Tag,
   Statistic,
+  Divider,
 } from 'antd'
 import { DateTime } from 'luxon'
 import Layout from '../../components/layout'
@@ -120,7 +121,58 @@ const columns = [
   return item
 })
 
-const History = ({ history, state }) => {
+const Screenshot = ({ shot }) => (
+  <li>
+    <a href={shot.url}>
+      {DateTime.fromISO(shot.dateChecked)
+        .setZone('America/New_York')
+        .toFormat('h:mm a')}
+    </a>
+  </li>
+)
+
+const Screenshots = ({ screenshots }) => {
+  console.log(screenshots)
+  if (!screenshots) {
+    return null
+  }
+  return (
+    <Row>
+      <Col span={8}>
+        <Divider orientation="left">Primary</Divider>
+        <ul>
+          {screenshots
+            .filter((shot) => !shot.secondary && !shot.tertiary)
+            .map((shot) => (
+              <Screenshot key={shot.url} shot={shot} />
+            ))}
+        </ul>
+      </Col>
+      <Col span={8}>
+        <Divider orientation="left">Secondary</Divider>
+        <ul>
+          {screenshots
+            .filter((shot) => shot.secondary)
+            .map((shot) => (
+              <Screenshot key={shot.url} shot={shot} />
+            ))}
+        </ul>
+      </Col>
+      <Col span={8}>
+        <Divider orientation="left">Tertiary</Divider>
+        <ul>
+          {screenshots
+            .filter((shot) => shot.tertiary)
+            .map((shot) => (
+              <Screenshot key={shot.url} shot={shot} />
+            ))}
+        </ul>
+      </Col>
+    </Row>
+  )
+}
+
+const History = ({ history, screenshots, state }) => {
   const [tableData, setTableData] = useState(false)
   const [preview, setPreview] = useState(false)
   const [isLoadingPreview, setIsLoadingPreview] = useState(false)
@@ -173,7 +225,7 @@ const History = ({ history, state }) => {
                 }
               })
               Object.keys(row).forEach((key) => {
-                if (typeof row[key] === 'number') {
+                if (typeof row[key] === 'number' && key !== 'date') {
                   row[key] = row[key].toLocaleString()
                 }
               })
@@ -196,7 +248,7 @@ const History = ({ history, state }) => {
           'ccc LLL d yyyy',
         )
         Object.keys(row).forEach((key) => {
-          if (typeof row[key] === 'number') {
+          if (typeof row[key] === 'number' && key !== 'date') {
             row[key] = row[key].toLocaleString()
           }
         })
@@ -228,6 +280,21 @@ const History = ({ history, state }) => {
           dataSource={tableData}
           columns={columns}
           pagination={false}
+          rowKey="date"
+          expandable={{
+            expandedRowRender: (record) => {
+              return (
+                <Screenshots
+                  screenshots={screenshots.filter(
+                    (screenshot) =>
+                      parseInt(screenshot.date, 10) ===
+                      parseInt(record.date, 10),
+                  )}
+                />
+              )
+            },
+            rowExpandable: (record) => true,
+          }}
           scroll={{ x: 2300, y: 900 }}
         />
       )}
@@ -238,6 +305,7 @@ const History = ({ history, state }) => {
 export default () => {
   const [stateInfo, setStateInfo] = useState(false)
   const [history, setHistory] = useState(false)
+  const [screenshots, setScreenshots] = useState(false)
   const router = useRouter()
   const { stateCode } = router.query
 
@@ -261,6 +329,16 @@ export default () => {
       .then((response) => response.json())
       .then((result) => {
         setHistory(result)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    fetch(
+      `https://covidtracking.com/api/v1/states/${stateCode.toLowerCase()}/screenshots.json`,
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setScreenshots(result)
       })
       .catch((e) => {
         console.log(e)
@@ -301,7 +379,11 @@ export default () => {
       )}
       <Card title="History">
         {history ? (
-          <History history={history} state={stateCode} />
+          <History
+            history={history}
+            screenshots={screenshots}
+            state={stateCode}
+          />
         ) : (
           <Space size="middle">
             <Spin size="large" />
