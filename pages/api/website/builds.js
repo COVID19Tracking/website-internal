@@ -1,11 +1,12 @@
 const NetlifyAPI = require('netlify')
 const client = new NetlifyAPI(process.env.COVID_INTERNAL_NETLIFY_TOKEN)
 
-export default async (req, res) => {
+export default async (req, res, context) => {
   const deploys = await client.listSiteDeploys({
     site_id: process.env.COVID_INTERNAL_NETLIFY_SITE,
   })
-  console.log(req)
+  console.log(context)
+
   const results = []
   deploys.forEach((deploy) => {
     if (deploy.context === 'production') {
