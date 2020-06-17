@@ -236,12 +236,12 @@ export default ({ history, screenshots, state }) => {
                   return
                 }
               })
-              Object.keys(row).forEach((key) => {
-                if (typeof row[key] === 'number' && key !== 'date') {
-                  row[key] = row[key].toLocaleString()
-                }
-              })
             }
+            Object.keys(row).forEach((key) => {
+              if (typeof row[key] === 'number' && key !== 'date') {
+                row[key] = row[key].toLocaleString()
+              }
+            })
             return row
           }),
         )

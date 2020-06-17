@@ -55,7 +55,7 @@ export default () => {
       {stateInfo !== false && (
         <>
           <Title>{stateInfo.name}</Title>
-          <Row gutter={16}>
+          <Row gutter={16} style={{ marginBottom: '2rem' }}>
             <Col span={4}>
               {history !== false && (
                 <Card>
@@ -67,7 +67,7 @@ export default () => {
               )}
             </Col>
             <Col span={20}>
-              <Card style={{ marginBottom: '2rem' }}>
+              <Card>
                 {stateInfo.notes ? (
                   <div
                     dangerouslySetInnerHTML={{
