@@ -1,6 +1,11 @@
 const fetch = require('node-fetch')
 
-export default async (req, res) => {
+export default async (req, res, context) => {
+  const { user } = context.clientContext
+  if (!user) {
+    res.statusCode = 403
+    res.json({})
+  }
   fetch(process.env.COVID_INTERNAL_PRIVATE_STATE_API)
     .then((response) => response.json())
     .then((result) => {
