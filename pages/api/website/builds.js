@@ -1,5 +1,5 @@
-const validateCookie = require('../../../lib/validate-cookie')
-const NetlifyAPI = require('netlify')
+import validateCookie from '../../../lib/validate-cookie'
+import NetlifyAPI from 'netlify'
 const client = new NetlifyAPI(process.env.COVID_INTERNAL_NETLIFY_TOKEN)
 
 export default async (req, res) => {

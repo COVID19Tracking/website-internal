@@ -1,5 +1,5 @@
-const validateCookie = require('../../../lib/validate-cookie')
-const fetch = require('node-fetch')
+import fetch from 'node-fetch'
+import validateCookie from '../../../lib/validate-cookie'
 
 export default async (req, res, context) => {
   if (!validateCookie(req)) {

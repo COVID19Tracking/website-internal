@@ -2,6 +2,9 @@ import fetch from 'node-fetch'
 import sha256 from 'crypto-js/sha256'
 
 export default (req, res) => {
+  console.log(
+    `https://slack.com/api/oauth.v2.access?client_id=${process.env.SLACK_CLIENT}&client_secret=${process.env.SLACK_SECRET}&code=${req.query.code}`,
+  )
   fetch(
     `https://slack.com/api/oauth.v2.access?client_id=${process.env.SLACK_CLIENT}&client_secret=${process.env.SLACK_SECRET}&code=${req.query.code}`,
   )
