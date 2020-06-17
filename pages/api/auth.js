@@ -1,13 +1,21 @@
 import fetch from 'node-fetch'
+
 import sha256 from 'crypto-js/sha256'
 
 export default (req, res) => {
+  const authBuffer = new Buffer(
+    `${process.env.SLACK_CLIENT}:${process.env.SLACK_SECRET}`,
+  )
+
   fetch(
     `https://slack.com/api/oauth.v2.access?redirect_uri=${encodeURIComponent(
       process.env.authEndpoint,
-    )}&client_id=${process.env.SLACK_CLIENT}&client_secret=${
-      process.env.SLACK_SECRET
-    }&code=${req.query.code}`,
+    )}&code=${req.query.code}`,
+    {
+      headers: {
+        Authorization: `Basic ${authBuffer.toString('base64')}`,
+      },
+    },
   )
     .then((result) => result.json())
     .then((response) => {
