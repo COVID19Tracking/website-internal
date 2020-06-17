@@ -17,7 +17,8 @@ export default (req, res) => {
         })
         res.end('Redirecting you')
       } else {
-        res.end('There was an error.')
+        res.statusCode = 403
+        res.end(response)
       }
     })
 }
