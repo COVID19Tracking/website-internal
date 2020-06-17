@@ -16,7 +16,7 @@ module.exports = withLess(
     target: 'serverless',
     env: {
       authEndpoint: process.env.NETLIFY
-        ? 'https://covid-website-internal.netlify.app/api/auth'
+        ? 'https://internal.covidtracking.com/api/auth'
         : 'http://localhost:3000/api/auth',
     },
   }),
