@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Layout, Menu, Dropdown, Button } from 'antd'
+import { Layout, Menu, Dropdown, Button, Empty } from 'antd'
 import netlifyIdentity from 'netlify-identity-widget'
 import { DownOutlined } from '@ant-design/icons'
 
 import Link from 'next/link'
 import states from '../_api/v1/states/info.json'
 
-const { SubMenu } = Menu
-const { Header, Footer, Sider, Content } = Layout
+const { Sider, Content } = Layout
 
 export default ({ title, children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -47,7 +46,6 @@ export default ({ title, children }) => {
                   More options <DownOutlined />
                 </Button>
               </Dropdown>
-              <h2>States</h2>
               <Menu>
                 {states
                   .sort((a, b) => (a.name > b.name ? 1 : -1))
@@ -75,7 +73,11 @@ export default ({ title, children }) => {
           </Layout>
         </>
       ) : (
-        <></>
+        <>
+          <Empty>
+            <h2>You should be logged in</h2>
+          </Empty>
+        </>
       )}
     </Layout>
   )
