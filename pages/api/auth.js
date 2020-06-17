@@ -21,7 +21,7 @@ export default (req, res) => {
         res.end('Redirecting you')
       } else {
         res.statusCode = 403
-        res.end(response)
+        res.end(JSON.stringify(response))
       }
     })
 }
