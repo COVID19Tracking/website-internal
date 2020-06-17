@@ -71,9 +71,9 @@ export default ({ title, children }) => {
       ) : (
         <div className="login-required">
           <a
-            href={`https://slack.com/oauth/v2/authorize?team=covid-tracking&user_scope=identity.basic&client_id=975992389859.1202235470608&redirect_uri=http%3A%2F%2F${encodeURIComponent(
-              process.env.authPath,
-            )}%2Fapi%2Fauth`}
+            href={`https://slack.com/oauth/v2/authorize?team=covid-tracking&user_scope=identity.basic&client_id=975992389859.1202235470608&redirect_uri=${encodeURIComponent(
+              process.env.authEndpoint,
+            )}`}
           >
             Log in
           </a>
