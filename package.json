@@ -13,6 +13,7 @@
     "@zeit/next-less": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
     "antd": "^4.3.3",
+    "crypto-js": "^4.0.0",
     "less": "^3.11.3",
     "luxon": "^1.24.1",
     "marked": "^1.1.0",

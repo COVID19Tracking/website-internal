@@ -9,23 +9,11 @@ import states from '../_api/v1/states/info.json'
 const { Sider, Content } = Layout
 
 export default ({ title, children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-    netlifyIdentity.init()
-    const user = netlifyIdentity.currentUser()
-    if (!user) {
-      netlifyIdentity.open()
-    } else {
-      setIsLoggedIn(true)
-    }
-  }, [])
+  const [loggedIn, setLoggedIn] = useState(false)
 
   return (
     <Layout>
-      {isLoggedIn ? (
+      {loggedIn ? (
         <>
           <Sider>
             <div id="sidebar">
@@ -73,11 +61,15 @@ export default ({ title, children }) => {
           </Layout>
         </>
       ) : (
-        <>
-          <Empty>
-            <h2>You should be logged in</h2>
-          </Empty>
-        </>
+        <Empty>
+          <a
+            href={`https://slack.com/oauth/v2/authorize?team=covid-tracking&user_scope=identity.basic&client_id=975992389859.1202235470608&redirect_uri=http%3A%2F%2F${encodeURIComponent(
+              process.env.authPath,
+            )}%2Fapi%2Fauth`}
+          >
+            Log in
+          </a>
+        </Empty>
       )}
     </Layout>
   )

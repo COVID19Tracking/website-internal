@@ -14,5 +14,10 @@ module.exports = withLess(
       javascriptEnabled: true,
     },
     target: 'serverless',
+    env: {
+      authPath: process.env.NETLIFY
+        ? 'covid-website-internal.netlify.app'
+        : 'localhost:3000',
+    },
   }),
 )
