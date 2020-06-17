@@ -1,16 +1,17 @@
+const validateCookie = require('../../../lib/validate-cookie')
 const NetlifyAPI = require('netlify')
 const client = new NetlifyAPI(process.env.COVID_INTERNAL_NETLIFY_TOKEN)
 
-export default async (req, res, context) => {
-  const { user} = context.clientContext;
-  if(!user) {
+export default async (req, res) => {
+  if (!validateCookie(req)) {
     res.statusCode = 403
-    res.json({})
+    res.end('Login required')
+    return
   }
+
   const deploys = await client.listSiteDeploys({
     site_id: process.env.COVID_INTERNAL_NETLIFY_SITE,
   })
-  
 
   const results = []
   deploys.forEach((deploy) => {

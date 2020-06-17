@@ -1,10 +1,11 @@
+const validateCookie = require('../../../lib/validate-cookie')
 const fetch = require('node-fetch')
 
 export default async (req, res, context) => {
-  const { user } = context.clientContext
-  if (!user) {
+  if (!validateCookie(req)) {
     res.statusCode = 403
-    res.json({})
+    res.end('Login required')
+    return
   }
   fetch(process.env.COVID_INTERNAL_PRIVATE_STATE_API)
     .then((response) => response.json())

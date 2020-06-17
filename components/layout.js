@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Layout, Menu, Dropdown, Button, Empty } from 'antd'
-import netlifyIdentity from 'netlify-identity-widget'
 import { DownOutlined } from '@ant-design/icons'
 
 import Link from 'next/link'
@@ -10,6 +9,15 @@ const { Sider, Content } = Layout
 
 export default ({ title, children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
+
+  useEffect(() => {
+    if (
+      typeof document !== 'undefined' &&
+      document.cookie.search('covidUser') > -1
+    ) {
+      setLoggedIn(true)
+    }
+  }, [])
 
   return (
     <Layout>
@@ -61,7 +69,7 @@ export default ({ title, children }) => {
           </Layout>
         </>
       ) : (
-        <Empty>
+        <div className="login-required">
           <a
             href={`https://slack.com/oauth/v2/authorize?team=covid-tracking&user_scope=identity.basic&client_id=975992389859.1202235470608&redirect_uri=http%3A%2F%2F${encodeURIComponent(
               process.env.authPath,
@@ -69,7 +77,7 @@ export default ({ title, children }) => {
           >
             Log in
           </a>
-        </Empty>
+        </div>
       )}
     </Layout>
   )

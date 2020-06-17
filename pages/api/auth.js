@@ -8,9 +8,9 @@ export default (req, res) => {
     .then((result) => result.json())
     .then((response) => {
       if (response.ok) {
-        const cookie = `covidUser="${response.authed_user.id}:${sha256(
+        const cookie = `covidUser=${response.authed_user.id}:${sha256(
           response.authed_user.id + process.env.AUTH_SALT,
-        )}"; Path=/`
+        )}; Path=/`
         res.writeHead(302, {
           'Set-cookie': cookie,
           Location: '/',
