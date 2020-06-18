@@ -54,18 +54,36 @@ export default () => {
         <>
           <Title>{stateInfo.name}</Title>
           <Row gutter={16} style={{ marginBottom: '2rem' }}>
-            <Col span={4}>
-              {history !== false && (
-                <Card>
-                  <Statistic
-                    title="Data quality grade"
-                    value={history[0].dataQualityGrade}
-                  />
+            <Col span={6}>
+              {stateInfo !== false && (
+                <Card title="API links">
+                  <p>
+                    <strong>Live</strong>{' '}
+                    <a
+                      href={`https://covidtracking.com/api/v1/states/${stateCode}/daily.csv`}
+                      target="_blank"
+                    >
+                      CSV
+                    </a>{' '}
+                    |{' '}
+                    <a
+                      href={`https://covidtracking.com/api/v1/states/${stateCode}/daily.json`}
+                      target="_blank"
+                    >
+                      JSON
+                    </a>
+                  </p>
+                  <p>
+                    <strong>Preview</strong>{' '}
+                    <a href={`/api/state?state=${stateCode}`} target="_blank">
+                      JSON
+                    </a>
+                  </p>
                 </Card>
               )}
             </Col>
-            <Col span={20}>
-              <Card>
+            <Col span={18}>
+              <Card title="Notes">
                 {stateInfo.notes ? (
                   <div
                     dangerouslySetInnerHTML={{

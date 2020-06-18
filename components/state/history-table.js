@@ -12,13 +12,14 @@ const columns = [
   {
     title: 'Batch',
     dataIndex: 'batchId',
+    width: 80,
   },
   {
     title: 'Screenshots',
     children: [
-      { title: 'Primary', dataIndex: '_screenshotsPrimary' },
-      { title: 'Secondary', dataIndex: '_screenshotsSecondary' },
-      { title: 'Tertiary', dataIndex: '_screenshotsTertiary' },
+      { title: 'Primary', dataIndex: '_screenshotsPrimary', width: 150 },
+      { title: 'Secondary', dataIndex: '_screenshotsSecondary', width: 150 },
+      { title: 'Tertiary', dataIndex: '_screenshotsTertiary', width: 150 },
     ],
   },
   {
