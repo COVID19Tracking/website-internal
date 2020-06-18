@@ -28,7 +28,7 @@ export default function Home() {
   }, [])
 
   const ComparisonStatistic = ({ title, field }) => {
-    if (current[field] < previewCurrent[field] || field === 'positive') {
+    if (current[field] < previewCurrent[field]) {
       return (
         <Statistic
           title={title}
