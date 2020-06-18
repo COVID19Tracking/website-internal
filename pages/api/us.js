@@ -7,11 +7,10 @@ export default async (req, res, context) => {
     res.end('Login required')
     return
   }
+
   fetch(
-    process.env.COVID_INTERNAL_PRIVATE_STATE_API.replace(
-      '{state}',
-      req.query.state.toLowerCase(),
-    ) + (req.query.preview ? '?preview=true' : ''),
+    process.env.COVID_INTERNAL_PRIVATE_US_API +
+      (req.query.preview ? '?preview=true' : ''),
   )
     .then((response) => response.json())
     .then((result) => {

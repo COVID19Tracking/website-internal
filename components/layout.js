@@ -25,7 +25,11 @@ export default ({ title, children }) => {
         <>
           <Sider>
             <div id="sidebar">
-              <img src="/logo.svg" alt="Covid tracking project" />
+              <Link href="/">
+                <a>
+                  <img src="/logo.svg" alt="Covid tracking project" />
+                </a>
+              </Link>
               <Dropdown
                 trigger={['click']}
                 overlay={
