@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Card, Space, Spin, Row, Col, Statistic } from 'antd'
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
 import { DateTime } from 'luxon'
 import Layout from '../components/layout'
 
 export default function Home() {
   const [history, setHistory] = useState(false)
+  const [preview, setPreview] = useState(false)
   const [current, setCurrent] = useState(false)
+  const [previewCurrent, setPreviewCurrent] = useState(false)
 
   useEffect(() => {
     fetch('/api/us')
@@ -14,7 +17,40 @@ export default function Home() {
         setHistory(result)
         setCurrent(result.sort((a, b) => (a.date < b.date ? 1 : -1)).shift())
       })
+    fetch('/api/us?preview')
+      .then((response) => response.json())
+      .then((result) => {
+        setPreview(result)
+        setPreviewCurrent(
+          result.sort((a, b) => (a.date < b.date ? 1 : -1)).shift(),
+        )
+      })
   }, [])
+
+  const ComparisonStatistic = ({ title, field }) => {
+    if (current[field] < previewCurrent[field] || field === 'positive') {
+      return (
+        <Statistic
+          title={title}
+          value={current[field]}
+          prefix={<ArrowUpOutlined />}
+          suffix={`Preview: ${previewCurrent[field].toLocaleString()}`}
+        />
+      )
+    }
+    if (current[field] > previewCurrent[field]) {
+      return (
+        <Statistic
+          title={title}
+          value={current[field]}
+          prefix={<ArrowUpOutlined />}
+          suffix={`Preview: ${previewCurrent[field].toLocaleString()}`}
+        />
+      )
+    }
+    return <Statistic title={title} value={current[field]} />
+  }
+
   return (
     <Layout title="Home">
       {current ? (
@@ -23,12 +59,13 @@ export default function Home() {
             Numbers as of{' '}
             {DateTime.fromISO(current.date).toFormat('LLLL dd yyyy')}
           </h1>
+          <p>Any changes in preview will appear below.</p>
           <Row gutter={16}>
             <Col span={6}>
               <Card title="Testing">
-                <Statistic title="Cases" value={current.positive} />
-                <Statistic title="Negative" value={current.positive} />
-                <Statistic title="Pending" value={current.Pending} />
+                <ComparisonStatistic title="Cases" field="positive" />
+                <ComparisonStatistic title="Negative" field="negative" />
+                <ComparisonStatistic title="Pending" field="pending" />
               </Card>
             </Col>
             <Col span={6}>
@@ -45,7 +82,7 @@ export default function Home() {
                   title="Negative tests"
                   value={current.negativeTestsViral}
                 />
-                <Statistic title="Total" value={current.totalTestsViral} />
+                <ComparisonStatistic title="Total" field="totalTestsViral" />
               </Card>
             </Col>
             <Col span={6}>
@@ -62,8 +99,11 @@ export default function Home() {
             </Col>
             <Col span={6}>
               <Card title="In ICU">
-                <Statistic title="Currently" value={current.inIcuCurrently} />
-                <Statistic title="Cumulative" value={current.inIcuCumulative} />
+                <ComparisonStatistic title="Currently" field="inIcuCurrently" />
+                <ComparisonStatistic
+                  title="Cumulative"
+                  field="inIcuCumulative"
+                />
               </Card>
             </Col>
           </Row>
@@ -82,8 +122,8 @@ export default function Home() {
             </Col>
             <Col span={6}>
               <Card title="Outcomes">
-                <Statistic title="Recovered" value={current.recovered} />
-                <Statistic title="Death" value={current.death} />
+                <ComparisonStatistic title="Recovered" field="recovered" />
+                <ComparisonStatistic title="Death" field="death" />
               </Card>
             </Col>
           </Row>
