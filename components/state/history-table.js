@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Button, Table, Tag } from 'antd'
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
 import { DateTime } from 'luxon'
 
 const columns = [
@@ -121,6 +122,40 @@ const columns = [
   return item
 })
 
+const RowDiff = ({ item, field, previousRow }) => {
+  if (!previousRow || !previousRow[field] || item === previousRow[field]) {
+    return <>{item.toLocaleString()}</>
+  }
+  if (item > previousRow[field]) {
+    return (
+      <>
+        {item.toLocaleString()}{' '}
+        <Tag className="diff" color="green">
+          <ArrowUpOutlined />
+          {(item - previousRow[field]).toLocaleString()}
+        </Tag>
+      </>
+    )
+  }
+  if (item < previousRow[field]) {
+    return (
+      <>
+        {item.toLocaleString()}{' '}
+        <Tag className="diff" color="red">
+          <ArrowDownOutlined />
+          {(previousRow[field] - item).toLocaleString()}
+        </Tag>
+      </>
+    )
+  }
+  return (
+    <>
+      {item.toLocaleString()}
+      <strong>hw</strong>
+    </>
+  )
+}
+
 const Screenshots = ({ screenshots }) => {
   if (!screenshots) {
     return null
@@ -161,6 +196,7 @@ export default ({ history, screenshots, state }) => {
   const [preview, setPreview] = useState(false)
   const [isLoadingPreview, setIsLoadingPreview] = useState(false)
   const [changedRows, setChangedRows] = useState([])
+  const [showDeltas, setShowDeltas] = useState(false)
 
   const addColumns = (row) => {
     row._screenshotsPrimary = (
@@ -237,8 +273,18 @@ export default ({ history, screenshots, state }) => {
               })
             }
             Object.keys(row).forEach((key) => {
-              if (typeof row[key] === 'number' && key !== 'date') {
-                row[key] = row[key].toLocaleString()
+              if (
+                typeof row[key] === 'number' &&
+                key !== 'date' &&
+                key !== 'batchId'
+              ) {
+                row[key] = (
+                  <RowDiff
+                    item={row[key]}
+                    field={key}
+                    previousRow={historyRow[index + 1]}
+                  />
+                )
               }
             })
             return row
@@ -253,15 +299,25 @@ export default ({ history, screenshots, state }) => {
 
   useEffect(() => {
     setTableData(
-      history.map((historyRow) => {
+      history.map((historyRow, index) => {
         const row = { ...historyRow }
         addColumns(row)
         row.formattedDate = DateTime.fromISO(row.date).toFormat(
           'ccc LLL d yyyy',
         )
         Object.keys(row).forEach((key) => {
-          if (typeof row[key] === 'number' && key !== 'date') {
-            row[key] = row[key].toLocaleString()
+          if (
+            typeof row[key] === 'number' &&
+            key !== 'date' &&
+            key !== 'batchId'
+          ) {
+            row[key] = (
+              <RowDiff
+                item={row[key]}
+                field={key}
+                previousRow={history[index + 1]}
+              />
+            )
           }
         })
         return row
@@ -282,19 +338,26 @@ export default ({ history, screenshots, state }) => {
           disabled={preview !== false}
         >
           {preview ? 'Preview data loaded' : 'Load preview data'}
+        </Button>{' '}
+        <Button
+          onClick={(event) => {
+            event.preventDefault()
+            setShowDeltas(!showDeltas)
+          }}
+        >
+          {showDeltas ? 'Hide daily changes' : 'Show daily changes'}
         </Button>
-        {changedRows.length > 0 && (
-          <>There are {changedRows.length} rows with changes.</>
-        )}
       </p>
       {tableData && (
-        <Table
-          dataSource={tableData}
-          columns={columns}
-          pagination={false}
-          rowKey="date"
-          scroll={{ x: 2300, y: 900 }}
-        />
+        <div className={showDeltas ? 'show-diff' : ''}>
+          <Table
+            dataSource={tableData}
+            columns={columns}
+            pagination={false}
+            rowKey="date"
+            scroll={{ x: 2300, y: 900 }}
+          />
+        </div>
       )}
     </>
   )
