@@ -10,6 +10,10 @@ const columns = [
     fixed: 'left',
   },
   {
+    title: 'Batch',
+    dataIndex: 'batchId',
+  },
+  {
     title: 'Screenshots',
     children: [
       { title: 'Primary', dataIndex: '_screenshotsPrimary' },
@@ -190,7 +194,7 @@ export default ({ history, screenshots, state }) => {
   }
 
   const loadPreview = () => {
-    fetch(`/api/state/preview?state=${state.toLowerCase()}`)
+    fetch(`/api/state?state=${state.toLowerCase()}&preview=true`)
       .then((response) => response.json())
       .then((result) => {
         setPreview(result)
@@ -210,12 +214,6 @@ export default ({ history, screenshots, state }) => {
               .pop()
 
             if (previewRow) {
-              row.formattedDate = (
-                <>
-                  {row.formattedDate}
-                  <Tag>Batch {previewRow.batchId}</Tag>
-                </>
-              )
               Object.keys(previewRow).forEach((key) => {
                 if (
                   typeof row[key] !== 'undefined' &&

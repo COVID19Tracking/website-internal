@@ -28,9 +28,7 @@ export default () => {
       .catch((e) => {
         console.log(e)
       })
-    fetch(
-      `https://covidtracking.com/api/v1/states/${stateCode.toLowerCase()}/daily.json`,
-    )
+    fetch(`/api/state?state=${stateCode.toLowerCase()}`)
       .then((response) => response.json())
       .then((result) => {
         setHistory(result)
