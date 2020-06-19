@@ -130,7 +130,7 @@ const RowDiff = ({ item, field, previousRow }) => {
     return (
       <>
         {item.toLocaleString()}{' '}
-        <Tag className="diff" color="green">
+        <Tag className="diff" color="grey">
           <ArrowUpOutlined />
           {(item - previousRow[field]).toLocaleString()}
         </Tag>
