@@ -21,7 +21,9 @@
     "next": "9.4.4",
     "next-on-netlify": "^2.1.0",
     "node-fetch": "^2.6.0",
+    "randomcolor": "^0.5.4",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "recharts": "^1.8.5"
   }
 }

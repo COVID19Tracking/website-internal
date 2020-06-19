@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Typography, Card, Spin, Space, Col, Row, Statistic } from 'antd'
+import Link from 'next/link'
+import { Typography, Menu, Card, Spin, Space, Col, Row } from 'antd'
 import Layout from '../../components/layout'
+import Navigation from '../../components/state/navigation'
 import HistoryTable from '../../components/state/history-table'
 import marked from 'marked'
 
@@ -52,8 +54,8 @@ export default () => {
     <Layout title={stateInfo ? stateInfo.name : 'Loading...'}>
       {stateInfo !== false && (
         <>
-          <Title>{stateInfo.name}</Title>
-          <Row gutter={16} style={{ marginBottom: '2rem' }}>
+          <Navigation stateInfo={stateInfo} />
+          <Row gutter={16} style={{ marginBottom: '2rem', marginTop: '2rem' }}>
             <Col span={6}>
               {stateInfo !== false && (
                 <Card title="API links">
@@ -98,17 +100,13 @@ export default () => {
           </Row>
         </>
       )}
-      <Card title="History">
-        {history && screenshots ? (
+      <Card title="History" loading={!(history && screenshots)}>
+        {history && screenshots && (
           <HistoryTable
             history={history}
             screenshots={screenshots}
             state={stateCode}
           />
-        ) : (
-          <Space size="middle">
-            <Spin size="large" />
-          </Space>
         )}
       </Card>
     </Layout>
