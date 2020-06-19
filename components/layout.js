@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Layout, Menu, Dropdown, Button, Empty } from 'antd'
-import { DownOutlined } from '@ant-design/icons'
+import { Layout, Menu } from 'antd'
+import { LeftOutlined, MenuOutlined } from '@ant-design/icons'
 
 import Link from 'next/link'
 import states from '../_api/v1/states/info.json'
@@ -9,6 +9,7 @@ const { Sider, Content } = Layout
 
 export default ({ title, children }) => {
   const [loggedIn, setLoggedIn] = useState(false)
+  const [hideSidebar, setHideSidebar] = useState(false)
 
   useEffect(() => {
     if (
@@ -23,42 +24,56 @@ export default ({ title, children }) => {
     <Layout>
       {loggedIn ? (
         <>
-          <Sider>
-            <div id="sidebar">
-              <Link href="/">
-                <a>
-                  <img src="/logo.svg" alt="Covid tracking project" />
-                </a>
-              </Link>
-              <Dropdown
-                trigger={['click']}
-                overlay={
-                  <Menu>
-                    <Menu.Item>
-                      <Link href="/website/history">
-                        <a>CTP website history</a>
-                      </Link>
-                    </Menu.Item>
-                  </Menu>
-                }
-              >
-                <Button>
-                  More options <DownOutlined />
-                </Button>
-              </Dropdown>
-              <Menu>
-                {states
-                  .sort((a, b) => (a.name > b.name ? 1 : -1))
-                  .map((state) => (
-                    <Menu.Item key={state.state}>
-                      <Link href={`/state/${state.state.toLowerCase()}`}>
-                        <a>{state.name}</a>
-                      </Link>
-                    </Menu.Item>
-                  ))}
-              </Menu>
-            </div>
-          </Sider>
+          {hideSidebar ? (
+            <button
+              className="sidebar-hide-button"
+              aria-label="Show menu"
+              onClick={(event) => {
+                event.preventDefault()
+                setHideSidebar(false)
+              }}
+            >
+              <MenuOutlined />
+            </button>
+          ) : (
+            <Sider>
+              <div id="sidebar">
+                <Menu>
+                  <Menu.Item>
+                    <button
+                      className="close-menu"
+                      onClick={(event) => {
+                        event.preventDefault()
+                        setHideSidebar(true)
+                      }}
+                    >
+                      <LeftOutlined /> Close menu
+                    </button>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Link href="/website/history">
+                      <a>CTP website history</a>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Link href="/">
+                      <a>US overview</a>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Divider />
+                  {states
+                    .sort((a, b) => (a.name > b.name ? 1 : -1))
+                    .map((state) => (
+                      <Menu.Item key={state.state}>
+                        <Link href={`/state/${state.state.toLowerCase()}`}>
+                          <a>{state.name}</a>
+                        </Link>
+                      </Menu.Item>
+                    ))}
+                </Menu>
+              </div>
+            </Sider>
+          )}
           <Layout>
             <Content
               className="site-layout-background"
