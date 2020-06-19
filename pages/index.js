@@ -53,7 +53,7 @@ export default function Home() {
 
   return (
     <Layout title="Home">
-      {current ? (
+      {current && previewCurrent ? (
         <>
           <h1>
             Numbers as of{' '}
