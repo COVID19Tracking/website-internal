@@ -1,50 +1,103 @@
-import { Fragment } from 'react'
 import { useState, useEffect } from 'react'
 import {
-  BarChart,
   CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
+  ComposedChart,
   Bar,
+  Line,
   ResponsiveContainer,
 } from 'recharts'
 import { useRouter } from 'next/router'
-import { Typography, Card, Form, Button, Select, Checkbox } from 'antd'
+import { Card, Form, Button, Select, Checkbox } from 'antd'
 import { DateTime } from 'luxon'
 import randomcolor from 'randomcolor'
 import Layout from '../../../components/layout'
 import Navigation from '../../../components/state/navigation'
-import openApi from '../../../_api/v1/openapi.json'
 
 const { Option } = Select
-const { Title } = Typography
+
+const chartableFields = [
+  {
+    name: 'Cases',
+    field: 'positive',
+  },
+  {
+    name: 'Test: Negative',
+    field: 'negative',
+  },
+  {
+    name: 'Test: Pending',
+    field: 'pending',
+  },
+  {
+    name: 'Outcomes: Recovered',
+    field: 'recovered',
+  },
+  {
+    name: 'Outcomes: Death',
+    field: 'death',
+  },
+  {
+    name: 'Hospitalized: Currently',
+    field: 'hospitalizedCurrently',
+  },
+  {
+    name: 'Hospitalized: Cumulative',
+    field: 'hospitalizedCumulative',
+  },
+  {
+    name: 'In ICU: Currently',
+    field: 'inIcuCurrently',
+  },
+  {
+    name: 'In ICU: Cumulative',
+    field: 'inIcuCumulative',
+  },
+]
 
 const Chart = ({ fields, history, preview, showPreview }) => {
   const data = []
-  history.forEach((row) => {
+  history.forEach((row, rowIndex) => {
     const item = {
-      name: DateTime.fromISO(row.date).toFormat('ccc LLL d yyyy'),
+      date: DateTime.fromISO(row.date).toFormat('ccc LLL d yyyy'),
     }
-    fields.forEach((field) => {
-      item[field] = row[field]
+    fields.forEach(({ field, name }) => {
+      item[name] = row[field]
+      const pastRows = [row[field]]
+      let pastIndex = rowIndex
+      while (pastIndex >= 0 && pastIndex >= rowIndex - 6) {
+        pastRows.push(history[pastIndex][field])
+        pastIndex -= 1
+      }
+      item[`${name} (7 day average)`] =
+        pastRows.reduce((a, b) => a + b, 0) / pastRows.length
     })
     data.push(item)
   })
 
   return (
     <ResponsiveContainer width="100%" height={500}>
-      <BarChart data={data}>
+      <ComposedChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
         <Legend />
-        {fields.map((field) => (
-          <Bar dataKey={field} fill={randomcolor()} />
+        {fields.map(({ name }) => (
+          <Bar dataKey={name} fill={randomcolor()} />
         ))}
-      </BarChart>
+        {fields.map(({ name }) => (
+          <Line
+            dataKey={`${name} (7 day average)`}
+            stroke={randomcolor()}
+            dot={false}
+            strokeWidth={3}
+          />
+        ))}
+      </ComposedChart>
     </ResponsiveContainer>
   )
 }
@@ -52,7 +105,7 @@ const Chart = ({ fields, history, preview, showPreview }) => {
 const FieldForm = ({ fields, setFields, setShowPreview }) => {
   const [selectedFields, setSelectedFields] = useState(fields)
   const [preview, setPreview] = useState(false)
-  const { properties } = openApi.components.schemas.States
+
   return (
     <Form
       layout="inline"
@@ -70,12 +123,8 @@ const FieldForm = ({ fields, setFields, setShowPreview }) => {
           setSelectedFields(value)
         }}
       >
-        {Object.keys(properties).map((field) => (
-          <Fragment key={field}>
-            {properties[field].type === 'integer' && (
-              <Option value={field}>{field}</Option>
-            )}
-          </Fragment>
+        {chartableFields.map((field, index) => (
+          <Option value={index}>{field.name}</Option>
         ))}
       </Select>
       <Form.Item style={{ marginLeft: '2rem' }}>
@@ -84,15 +133,15 @@ const FieldForm = ({ fields, setFields, setShowPreview }) => {
             setPreview(event.value)
           }}
         >
-          Show preview data"
+          Show preview data
         </Checkbox>
       </Form.Item>
-      .
+
       <Form.Item style={{ marginLeft: '2rem' }}>
         <Button
           onClick={(event) => {
             event.preventDefault()
-            setFields(selectedFields)
+            setFields(selectedFields.map((index) => chartableFields[index]))
             setShowPreview(preview)
           }}
         >
@@ -107,7 +156,7 @@ export default () => {
   const [stateInfo, setStateInfo] = useState(false)
   const [history, setHistory] = useState(false)
   const [previewHistory, setPreviewHistory] = useState(false)
-  const [fields, setFields] = useState(['positive'])
+  const [fields, setFields] = useState([{ field: 'positive', name: 'Cases' }])
   const [showPreview, setShowPreview] = useState(false)
 
   const router = useRouter()
