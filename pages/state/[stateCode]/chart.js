@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/router'
 import { Card, Form, Button, Select, Checkbox } from 'antd'
 import { DateTime } from 'luxon'
-import randomcolor from 'randomcolor'
+import Color from 'color'
 import Layout from '../../../components/layout'
 import Navigation from '../../../components/state/navigation'
 
@@ -23,38 +23,47 @@ const chartableFields = [
   {
     name: 'Cases',
     field: 'positive',
+    color: '#b5e3db',
   },
   {
     name: 'Test: Negative',
     field: 'negative',
+    color: '#cccc00',
   },
   {
     name: 'Test: Pending',
     field: 'pending',
+    color: '#a19bca',
   },
   {
     name: 'Outcomes: Recovered',
     field: 'recovered',
+    color: '#f4a071',
   },
   {
     name: 'Outcomes: Death',
     field: 'death',
+    color: '#2f6488',
   },
   {
     name: 'Hospitalized: Currently',
     field: 'hospitalizedCurrently',
+    color: '#527740',
   },
   {
     name: 'Hospitalized: Cumulative',
     field: 'hospitalizedCumulative',
+    color: '#264a8c',
   },
   {
     name: 'In ICU: Currently',
     field: 'inIcuCurrently',
+    color: '#5e4f24',
   },
   {
     name: 'In ICU: Cumulative',
     field: 'inIcuCumulative',
+    color: '#4c5153',
   },
 ]
 
@@ -66,7 +75,7 @@ const Chart = ({ fields, history, preview, showPreview }) => {
     }
     fields.forEach(({ field, name }) => {
       item[name] = row[field]
-      const pastRows = [row[field]]
+      const pastRows = []
       let pastIndex = rowIndex
       while (pastIndex >= 0 && pastIndex >= rowIndex - 6) {
         pastRows.push(history[pastIndex][field])
@@ -86,13 +95,13 @@ const Chart = ({ fields, history, preview, showPreview }) => {
         <YAxis />
         <Tooltip />
         <Legend />
-        {fields.map(({ name }) => (
-          <Bar dataKey={name} fill={randomcolor()} />
+        {fields.map(({ name, color }) => (
+          <Bar dataKey={name} fill={color} />
         ))}
-        {fields.map(({ name }) => (
+        {fields.map(({ name, color }) => (
           <Line
             dataKey={`${name} (7 day average)`}
-            stroke={randomcolor()}
+            stroke={Color(color).darken(0.25)}
             dot={false}
             strokeWidth={3}
           />
@@ -156,7 +165,9 @@ export default () => {
   const [stateInfo, setStateInfo] = useState(false)
   const [history, setHistory] = useState(false)
   const [previewHistory, setPreviewHistory] = useState(false)
-  const [fields, setFields] = useState([{ field: 'positive', name: 'Cases' }])
+  const [fields, setFields] = useState(
+    chartableFields.filter((field) => field.field === 'positive'),
+  )
   const [showPreview, setShowPreview] = useState(false)
 
   const router = useRouter()
