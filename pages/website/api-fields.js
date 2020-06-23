@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Typography, Card, Spin, Space, Table } from 'antd'
-import { DateTime } from 'luxon'
+import marked from 'marked'
 import Layout from '../../components/layout'
 const { Title } = Typography
 
@@ -8,10 +8,20 @@ const columns = [
   {
     title: 'Column name in sheet',
     dataIndex: 'x-sheetColumn',
+    sorter: (a, b) => {
+      if (typeof a['x-sheetColumn'] === 'undefined') {
+        return -1
+      }
+      if (typeof b['x-sheetColumn'] === 'undefined') {
+        return 1
+      }
+      return a['x-sheetColumn'] > b['x-sheetColumn'] ? 1 : -1
+    },
   },
   {
     title: 'API field',
     dataIndex: 'apiField',
+    sorter: (a, b) => (a.apiField > b.apiField ? 1 : -1),
   },
   {
     title: 'Website note',
@@ -20,6 +30,8 @@ const columns = [
   {
     title: 'Deprecated in API',
     dataIndex: 'x-deprecated',
+    render: (text) => (text ? 'Yes' : 'No'),
+    sorter: (a, b) => (a['x-deprecated'] && !b['x-deprecated'] ? 1 : -1),
   },
   {
     title: 'Note',
@@ -28,6 +40,12 @@ const columns = [
   {
     title: 'Internal note',
     dataIndex: 'x-internalNote',
+    render: (text) => {
+      if (!text) {
+        return null
+      }
+      return <div dangerouslySetInnerHTML={{ __html: marked(text) }} />
+    },
   },
 ].map((item) => {
   item.key = item.dataIndex
@@ -37,14 +55,21 @@ const columns = [
 const ApiFields = ({ openApi }) => {
   const { properties } = openApi.components.schemas.States
   const fields = []
-  properties.forEach((property, fieldName) => {
+  Object.keys(properties).forEach((fieldName) => {
+    const property = properties[fieldName]
     fields.push({
       ...property,
       apiField: fieldName,
       ...property.metadata,
     })
   })
-  return <Table dataSource={fields} columns={columns} />
+  return (
+    <Table
+      dataSource={fields.sort((a, b) => (a.apiField > b.apiField ? 1 : -1))}
+      columns={columns}
+      pagination={false}
+    />
+  )
 }
 
 export default () => {

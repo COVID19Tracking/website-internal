@@ -70,7 +70,10 @@ export default ({ title, children }) => {
                     .sort((a, b) => (a.name > b.name ? 1 : -1))
                     .map((state) => (
                       <Menu.Item key={state.state}>
-                        <Link href={`/state/${state.state.toLowerCase()}`}>
+                        <Link
+                          href="/state/[stateCode]"
+                          as={`/state/${state.state.toLowerCase()}`}
+                        >
                           <a>{state.name}</a>
                         </Link>
                       </Menu.Item>
