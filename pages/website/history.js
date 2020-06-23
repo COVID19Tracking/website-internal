@@ -55,15 +55,7 @@ export default () => {
   return (
     <Layout title="Website history">
       <Title>Website history</Title>
-      <Card>
-        {history ? (
-          <History history={history} />
-        ) : (
-          <Space size="middle">
-            <Spin size="large" />
-          </Space>
-        )}
-      </Card>
+      <Card loading={!history}>{history && <History history={history} />}</Card>
     </Layout>
   )
 }

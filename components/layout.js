@@ -56,6 +56,11 @@ export default ({ title, children }) => {
                     </Link>
                   </Menu.Item>
                   <Menu.Item>
+                    <Link href="/website/api-fields">
+                      <a>API fields</a>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item>
                     <Link href="/">
                       <a>US overview</a>
                     </Link>
