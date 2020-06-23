@@ -123,6 +123,9 @@ const columns = [
 })
 
 const RowDiff = ({ item, field, previousRow }) => {
+  const getPercentage = (current, prior) =>
+    Math.round(((current - prior) / prior) * 100 * 10) / 10
+
   if (!previousRow || !previousRow[field] || item === previousRow[field]) {
     return <>{item.toLocaleString()}</>
   }
@@ -131,8 +134,9 @@ const RowDiff = ({ item, field, previousRow }) => {
       <>
         {item.toLocaleString()}{' '}
         <Tag className="diff" color="grey">
-          <ArrowUpOutlined />
-          {(item - previousRow[field]).toLocaleString()}
+          <ArrowUpOutlined alt="" aria-label="Number is up from prior day" />
+          {(item - previousRow[field]).toLocaleString()}{' '}
+          {getPercentage(item, previousRow[field])}%
         </Tag>
       </>
     )
@@ -141,9 +145,13 @@ const RowDiff = ({ item, field, previousRow }) => {
     return (
       <>
         {item.toLocaleString()}{' '}
-        <Tag className="diff" color="red">
-          <ArrowDownOutlined />
-          {(previousRow[field] - item).toLocaleString()}
+        <Tag className="diff" color="#2db7f5">
+          <ArrowDownOutlined
+            alt=""
+            aria-label="Number is down from prior day"
+          />
+          {(previousRow[field] - item).toLocaleString()}{' '}
+          {getPercentage(item, previousRow[field])}%
         </Tag>
       </>
     )
