@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Button, Table, Tag } from 'antd'
+import { Button, Table, Tag, Spin, Card, Modal } from 'antd'
+import Link from 'next/link'
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
 import { DateTime } from 'luxon'
 
@@ -9,6 +10,10 @@ const columns = [
     dataIndex: 'formattedDate',
     width: 100,
     fixed: 'left',
+  },
+  {
+    title: 'History',
+    dataIndex: '_history',
   },
   {
     title: 'Batch',
@@ -200,10 +205,6 @@ const APIpreview = ({ date, state }) => (
 )
 
 export default ({ history, screenshots, state }) => {
-  const [tableData, setTableData] = useState(false)
-  const [preview, setPreview] = useState(false)
-  const [isLoadingPreview, setIsLoadingPreview] = useState(false)
-  const [changedRows, setChangedRows] = useState([])
   const [showDeltas, setShowDeltas] = useState(false)
 
   const addColumns = (row) => {
@@ -238,115 +239,32 @@ export default ({ history, screenshots, state }) => {
     row._api = <APIpreview date={row.date} state={row.state} />
   }
 
-  const loadPreview = () => {
-    fetch(`/api/state?state=${state.toLowerCase()}&preview=true`)
-      .then((response) => response.json())
-      .then((result) => {
-        setPreview(result)
-        setIsLoadingPreview(false)
-        setTableData(
-          history.map((historyRow) => {
-            const row = { ...historyRow }
-            addColumns(row)
-            row.formattedDate = DateTime.fromISO(row.date).toFormat(
-              'ccc LLL d yyyy',
-            )
-            const previewRow = result
-              .filter(
-                (previewRow) =>
-                  parseInt(previewRow.date, 10) === parseInt(row.date, 10),
-              )
-              .pop()
-
-            if (previewRow) {
-              Object.keys(previewRow).forEach((key) => {
-                if (
-                  typeof row[key] !== 'undefined' &&
-                  typeof row[key] === 'number' &&
-                  parseInt(row[key], 10) !== parseInt(previewRow[key], 10)
-                ) {
-                  if (changedRows.indexOf(row.date) > -1) {
-                    changedRows.push(row.date)
-                  }
-                  row[key] = (
-                    <>
-                      {row[key].toLocaleString()}
-                      <Tag color="volcano">
-                        {previewRow[key].toLocaleString()}
-                      </Tag>
-                    </>
-                  )
-                  return
-                }
-              })
-            }
-            Object.keys(row).forEach((key) => {
-              if (
-                typeof row[key] === 'number' &&
-                key !== 'date' &&
-                key !== 'batchId'
-              ) {
-                row[key] = (
-                  <RowDiff
-                    item={row[key]}
-                    field={key}
-                    previousRow={historyRow[index + 1]}
-                  />
-                )
-              }
-            })
-            return row
-          }),
+  const tableData = history.map((historyRow, index) => {
+    const row = { ...historyRow }
+    addColumns(row)
+    row.formattedDate = DateTime.fromISO(row.date).toFormat('ccc LLL d yyyy')
+    Object.keys(row).forEach((key) => {
+      if (typeof row[key] === 'number' && key !== 'date' && key !== 'batchId') {
+        row[key] = (
+          <RowDiff
+            item={row[key]}
+            field={key}
+            previousRow={history[index + 1]}
+          />
         )
-        setChangedRows(changedRows)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
-
-  useEffect(() => {
-    setTableData(
-      history.map((historyRow, index) => {
-        const row = { ...historyRow }
-        addColumns(row)
-        row.formattedDate = DateTime.fromISO(row.date).toFormat(
-          'ccc LLL d yyyy',
-        )
-        Object.keys(row).forEach((key) => {
-          if (
-            typeof row[key] === 'number' &&
-            key !== 'date' &&
-            key !== 'batchId'
-          ) {
-            row[key] = (
-              <RowDiff
-                item={row[key]}
-                field={key}
-                previousRow={history[index + 1]}
-              />
-            )
-          }
-        })
-        return row
-      }),
+      }
+    })
+    row._history = (
+      <Link href={`/state/${row.state.toLowerCase()}/history/${row.date}`}>
+        History
+      </Link>
     )
-  }, [])
+    return row
+  })
 
   return (
     <>
       <p>
-        <Button
-          onClick={(event) => {
-            event.preventDefault()
-            setIsLoadingPreview(true)
-            loadPreview()
-          }}
-          loading={isLoadingPreview}
-          disabled={preview !== false}
-        >
-          {preview ? 'Preview data loaded' : 'Load preview data'}
-        </Button>{' '}
         <Button
           onClick={(event) => {
             event.preventDefault()
@@ -370,3 +288,5 @@ export default ({ history, screenshots, state }) => {
     </>
   )
 }
+
+export { columns }
