@@ -3,6 +3,14 @@ import fetch from 'node-fetch'
 import sha256 from 'crypto-js/sha256'
 
 export default (req, res) => {
+  if (process.env.COVID_INTERNAL_DISABLE_AUTH) {
+    res.writeHead(302, {
+      'Set-cookie': 'covidUser=local:0; Path=/',
+      Location: '/',
+    })
+    res.end()
+    return
+  }
   const authBuffer = new Buffer(
     `${process.env.SLACK_CLIENT}:${process.env.SLACK_SECRET}`,
   )
