@@ -12,12 +12,10 @@ export default () => {
   const [history, setHistory] = useState(false)
   const router = useRouter()
   const { stateCode, date } = router.query
-  const tableColumns = columns.filter(
-    (column) => column.title !== 'Screenshots',
-  )
+  const tableColumns = columns.filter((column) => !column.hideInBatch)
   tableColumns.unshift({
     title: 'Note',
-    dataIndex: 'batch.batchNote',
+    dataIndex: 'batch__batchNote',
   })
 
   useEffect(() => {
@@ -38,7 +36,14 @@ export default () => {
     fetch(`/api/history?state=${stateCode.toLowerCase()}&date=${date}`)
       .then((response) => response.json())
       .then((result) => {
-        setHistory(result)
+        setHistory(
+          result.map((row) => {
+            Object.keys(row.batch).forEach((key) => {
+              row[`batch__${key}`] = row.batch[key]
+            })
+            return row
+          }),
+        )
       })
       .catch((e) => {
         console.log(e)

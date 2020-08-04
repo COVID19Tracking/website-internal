@@ -10,10 +10,12 @@ const columns = [
     dataIndex: 'formattedDate',
     width: 100,
     fixed: 'left',
+    hideInBatch: true,
   },
   {
     title: 'History',
     dataIndex: '_history',
+    hideInBatch: true,
   },
   {
     title: 'Batch',
@@ -22,6 +24,7 @@ const columns = [
   },
   {
     title: 'Screenshots',
+    hideInBatch: true,
     children: [
       { title: 'Primary', dataIndex: '_screenshotsPrimary', width: 150 },
       { title: 'Secondary', dataIndex: '_screenshotsSecondary', width: 150 },
