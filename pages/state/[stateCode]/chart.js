@@ -26,6 +26,11 @@ const chartableFields = [
     color: '#b5e3db',
   },
   {
+    name: 'Cases: Daily',
+    field: 'positiveIncrease',
+    color: '#aa0000',
+  },
+  {
     name: 'Test: Negative',
     field: 'negative',
     color: '#cccc00',
