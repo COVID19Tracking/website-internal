@@ -61,7 +61,6 @@ export default () => {
       {stateInfo !== false && (
         <>
           <Navigation stateInfo={stateInfo} />
-          {production ? <>Prod</> : <>Stage</>}
           <Row gutter={16} style={{ marginBottom: '2rem', marginTop: '2rem' }}>
             <Col span={6}>
               {stateInfo !== false && (
