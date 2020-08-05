@@ -10,6 +10,7 @@ const { Title } = Typography
 export default () => {
   const [stateInfo, setStateInfo] = useState(false)
   const [history, setHistory] = useState(false)
+  const [production, setProduction] = useState(true)
   const router = useRouter()
   const { stateCode, date } = router.query
   const tableColumns = columns.filter((column) => !column.hideInBatch)
@@ -33,7 +34,9 @@ export default () => {
         console.log(e)
       })
 
-    fetch(`/api/history?state=${stateCode.toLowerCase()}&date=${date}`)
+    fetch(
+      `/api/history?state=${stateCode.toLowerCase()}&date=${date}&production=${production}`,
+    )
       .then((response) => response.json())
       .then((result) => {
         setHistory(
@@ -51,7 +54,11 @@ export default () => {
   }, [stateCode])
 
   return (
-    <Layout title={stateInfo ? stateInfo.name : 'Loading...'}>
+    <Layout
+      title={stateInfo ? stateInfo.name : 'Loading...'}
+      production={production}
+      setProduction={(newProduction) => setProduction(newProduction)}
+    >
       {stateInfo !== false && (
         <>
           <Navigation stateInfo={stateInfo} />

@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Switch } from 'antd'
 import { LeftOutlined, MenuOutlined } from '@ant-design/icons'
-
 import Link from 'next/link'
 import states from '../_api/v1/states/info.json'
 
 const { Sider, Content } = Layout
 
-export default ({ title, children }) => {
+export default ({ title, children, production, setProduction }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [hideSidebar, setHideSidebar] = useState(false)
 
@@ -64,6 +63,16 @@ export default ({ title, children }) => {
                     <Link href="/">
                       <a>US overview</a>
                     </Link>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Switch
+                      defaultChecked
+                      style={{ marginLeft: 0, marginRight: '1rem' }}
+                      onChange={() => {
+                        setProduction(!production)
+                      }}
+                    />
+                    {production ? <>Production</> : <>Staging</>}
                   </Menu.Item>
                   <Menu.Divider />
                   {states

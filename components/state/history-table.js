@@ -259,7 +259,7 @@ export default ({ history, screenshots, state }) => {
     })
     row._history = (
       <Link href={`/state/${row.state.toLowerCase()}/history/${row.date}`}>
-        History
+        <a>History</a>
       </Link>
     )
     return row
