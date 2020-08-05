@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { Typography, Menu, Card, Spin, Space, Col, Row } from 'antd'
+import { Typography, Card, Col, Row } from 'antd'
 import Layout from '../../components/layout'
 import Navigation from '../../components/state/navigation'
 import HistoryTable from '../../components/state/history-table'
@@ -13,6 +12,7 @@ export default () => {
   const [stateInfo, setStateInfo] = useState(false)
   const [history, setHistory] = useState(false)
   const [screenshots, setScreenshots] = useState(false)
+  const [production, setProduction] = useState(true)
   const router = useRouter()
   const { stateCode } = router.query
 
@@ -30,7 +30,9 @@ export default () => {
       .catch((e) => {
         console.log(e)
       })
-    fetch(`/api/state?state=${stateCode.toLowerCase()}`)
+    fetch(
+      `/api/state?state=${stateCode.toLowerCase()}&production=${production}`,
+    )
       .then((response) => response.json())
       .then((result) => {
         setHistory(result)
@@ -48,13 +50,18 @@ export default () => {
       .catch((e) => {
         console.log(e)
       })
-  }, [stateCode])
+  }, [stateCode, production])
 
   return (
-    <Layout title={stateInfo ? stateInfo.name : 'Loading...'}>
+    <Layout
+      title={stateInfo ? stateInfo.name : 'Loading...'}
+      production={production}
+      setProduction={(newProduction) => setProduction(newProduction)}
+    >
       {stateInfo !== false && (
         <>
           <Navigation stateInfo={stateInfo} />
+          {production ? <>Prod</> : <>Stage</>}
           <Row gutter={16} style={{ marginBottom: '2rem', marginTop: '2rem' }}>
             <Col span={6}>
               {stateInfo !== false && (
