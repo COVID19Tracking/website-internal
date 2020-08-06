@@ -51,7 +51,7 @@ export default () => {
       .catch((e) => {
         console.log(e)
       })
-  }, [stateCode])
+  }, [stateCode, production])
 
   return (
     <Layout
