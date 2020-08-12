@@ -86,7 +86,7 @@ export default () => {
       .catch((e) => {
         console.log(e)
       })
-    fetch(`/api/states?production=${production}`)
+    fetch(`/api-preview/states/daily`)
       .then((response) => response.json())
       .then((result) => {
         setPreview(result)

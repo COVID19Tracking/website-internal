@@ -8,3 +8,8 @@
   status = 200
   force = true
   conditions = {Role = ["user"]}
+
+[[redirects]]
+  from="/api-preview/states/daily"
+  to="http://internalapi.covidtracking.com/api/v1/public/states/daily"
+  status=200
