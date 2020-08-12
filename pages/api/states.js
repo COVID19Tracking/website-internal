@@ -9,13 +9,12 @@ export default async (req, res, context) => {
   }
 
   fetch(
-    process.env.COVID_INTERNAL_PRIVATE_STATE_API.replace(
+    process.env.COVID_INTERNAL_PRIVATE_STATES_API.replace(
       '{host}',
       req.query.production === 'true'
         ? process.env.COVID_INTERNAL_API_PRODUCTION
         : process.env.COVID_INTERNAL_API_STAGING,
-    ).replace('{state}', req.query.state.toLowerCase()) +
-      (req.query.preview ? '?preview=true' : ''),
+    ),
   )
     .then((response) => response.json())
     .then((result) => {
