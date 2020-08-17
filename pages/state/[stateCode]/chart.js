@@ -183,7 +183,7 @@ export default () => {
       return
     }
     fetch(
-      `https://covidtracking.com/api/v1/states/${stateCode.toLowerCase()}/info.json`,
+      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/info.json`,
     )
       .then((response) => response.json())
       .then((result) => {

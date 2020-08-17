@@ -194,13 +194,13 @@ const Screenshots = ({ screenshots }) => {
 const APIpreview = ({ date, state }) => (
   <>
     <a
-      href={`https://covidtracking.com/api/v1/states/${state.toLowerCase()}/${date}.json`}
+      href={`https://api.covidtracking.com/v1/states/${state.toLowerCase()}/${date}.json`}
     >
       JSON
     </a>{' '}
     |
     <a
-      href={`https://covidtracking.com/api/v1/states/${state.toLowerCase()}/${date}.csv`}
+      href={`https://api.covidtracking.com/v1/states/${state.toLowerCase()}/${date}.csv`}
     >
       CSV
     </a>

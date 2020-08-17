@@ -21,7 +21,7 @@ export default () => {
       return
     }
     fetch(
-      `https://covidtracking.com/api/v1/states/${stateCode.toLowerCase()}/info.json`,
+      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/info.json`,
     )
       .then((response) => response.json())
       .then((result) => {
@@ -41,7 +41,7 @@ export default () => {
         console.log(e)
       })
     fetch(
-      `https://covidtracking.com/api/v1/states/${stateCode.toLowerCase()}/screenshots.json`,
+      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/screenshots.json`,
     )
       .then((response) => response.json())
       .then((result) => {
@@ -68,14 +68,14 @@ export default () => {
                   <p>
                     <strong>Live</strong>{' '}
                     <a
-                      href={`https://covidtracking.com/api/v1/states/${stateCode}/daily.csv`}
+                      href={`https://api.covidtracking.com/v1/states/${stateCode}/daily.csv`}
                       target="_blank"
                     >
                       CSV
                     </a>{' '}
                     |{' '}
                     <a
-                      href={`https://covidtracking.com/api/v1/states/${stateCode}/daily.json`}
+                      href={`https://api.covidtracking.com/v1/states/${stateCode}/daily.json`}
                       target="_blank"
                     >
                       JSON
