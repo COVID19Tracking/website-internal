@@ -15,6 +15,16 @@ export default () => {
   const { stateCode, date } = router.query
   const tableColumns = columns.filter((column) => !column.hideInBatch)
   tableColumns.unshift({
+    title: 'User',
+    dataIndex: 'batch__user',
+    key: 'batch__user',
+  })
+  tableColumns.unshift({
+    title: 'Shift lead',
+    dataIndex: 'batch__shiftLead',
+    key: 'batch__shiftLead',
+  })
+  tableColumns.unshift({
     title: 'Note',
     dataIndex: 'batch__batchNote',
     key: 'batch__batchNote',
