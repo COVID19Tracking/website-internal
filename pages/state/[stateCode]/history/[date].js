@@ -16,25 +16,35 @@ export default () => {
   const tableColumns = columns.filter((column) => !column.hideInBatch)
   const batchTableColumns = [
     {
+      title: 'Batch ID',
+      dataIndex: 'batch__batchId',
+      width: 60,
+      fixed: 'left',
+    },
+    {
       title: 'Note',
       dataIndex: 'batch__batchNote',
       key: 'batch__batchNote',
+      width: 200,
       render: (note) => (note.length > 40 ? `${note.substr(0, 40)}...` : note),
     },
     {
       title: 'User',
       dataIndex: 'batch__user',
       key: 'batch__user',
+      width: 90,
     },
     {
       title: 'Shift lead',
       dataIndex: 'batch__shiftLead',
       key: 'batch__shiftLead',
+      width: 90,
     },
     {
       title: 'Batch link',
       dataIndex: 'batch__link',
       key: 'batch__link',
+      width: 90,
       render: (note) =>
         note ? (
           <a
@@ -47,7 +57,7 @@ export default () => {
           'none'
         ),
     },
-    ...tableColumns,
+    ...tableColumns.filter((item) => item.dataIndex !== 'date'),
   ]
 
   useEffect(() => {
@@ -101,7 +111,7 @@ export default () => {
           dataSource={history}
           columns={batchTableColumns}
           pagination={false}
-          rowKey="date"
+          rowKey="batch__batchId"
           scroll={{ x: 2300, y: 900 }}
           expandable={{
             expandedRowRender: (record) => (

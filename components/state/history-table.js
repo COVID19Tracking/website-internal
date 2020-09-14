@@ -15,6 +15,7 @@ const columns = [
   {
     title: 'Batch',
     dataIndex: 'batchId',
+    hideInBatch: true,
     width: 80,
     render: (batchId, record) => (
       <Link
@@ -27,6 +28,7 @@ const columns = [
   {
     title: 'API links',
     dataIndex: '_api',
+    hideInBatch: true,
   },
   { title: 'Positive', dataIndex: 'positive' },
   { title: 'Negative', dataIndex: 'negative' },
