@@ -13,120 +13,82 @@ const columns = [
     hideInBatch: true,
   },
   {
-    title: 'History',
-    dataIndex: '_history',
-    hideInBatch: true,
-  },
-  {
     title: 'Batch',
     dataIndex: 'batchId',
     width: 80,
-  },
-  {
-    title: 'Screenshots',
-    hideInBatch: true,
-    children: [
-      { title: 'Primary', dataIndex: '_screenshotsPrimary', width: 150 },
-      { title: 'Secondary', dataIndex: '_screenshotsSecondary', width: 150 },
-      { title: 'Tertiary', dataIndex: '_screenshotsTertiary', width: 150 },
-    ],
+    render: (batchId, record) => (
+      <Link
+        href={`/state/${record.state.toLowerCase()}/history/${record.date}`}
+      >
+        <a>{batchId}</a>
+      </Link>
+    ),
   },
   {
     title: 'API links',
     dataIndex: '_api',
   },
+  { title: 'Positive', dataIndex: 'positive' },
+  { title: 'Negative', dataIndex: 'negative' },
+  { title: 'Pending', dataIndex: 'pending' },
+  { title: 'Hospitalized – Currently', dataIndex: 'hospitalizedCurrently' },
+  { title: 'Hospitalized – Cumulative', dataIndex: 'hospitalizedCumulative' },
+  { title: 'In ICU – Currently', dataIndex: 'inIcuCurrently' },
+  { title: 'In ICU – Cumulative', dataIndex: 'inIcuCumulative' },
+  { title: 'On Ventilator – Currently', dataIndex: 'onVentilatorCurrently' },
+  { title: 'On Ventilator – Cumulative', dataIndex: 'onVentilatorCumulative' },
+  { title: 'Recovered', dataIndex: 'recovered' },
+  { title: 'Deaths', dataIndex: 'death' },
+  { title: 'Data Quality Grade', dataIndex: 'dataQualityGrade' },
+  { title: 'Last Update ET', dataIndex: 'lastUpdateIsoUtc' },
+  { title: 'Total Antibody Tests', dataIndex: 'totalTestsAntibody' },
+  { title: 'Positive Antibody Tests', dataIndex: 'positiveTestsAntibody' },
+  { title: 'Negative Antibody Tests', dataIndex: 'negativeTestsAntibody' },
+  { title: 'Total Tests (PCR)', dataIndex: 'totalTestsViral' },
+  { title: 'Positive Tests (PCR)', dataIndex: 'positiveTestsViral' },
+  { title: 'Negative Tests (PCR)', dataIndex: 'negativeTestsViral' },
+  { title: 'Positive Cases (PCR)', dataIndex: 'positiveCasesViral' },
+  { title: 'Deaths (confirmed)', dataIndex: 'deathConfirmed' },
+  { title: 'Deaths (probable)', dataIndex: 'deathProbable' },
+  { title: 'Total PCR Tests (People)', dataIndex: 'totalTestsPeopleViral' },
+  { title: 'Total Test Results', dataIndex: 'totalTestResults' },
+  { title: 'Probable Cases', dataIndex: 'probableCases' },
   {
-    title: 'Cases',
-    dataIndex: 'positive',
+    title: 'Total Test Encounters (PCR)',
+    dataIndex: 'totalTestEncountersViral',
   },
   {
-    title: 'Tests',
-    children: [
-      {
-        title: 'Negative',
-        dataIndex: 'negative',
-      },
-      {
-        title: 'Pending',
-        dataIndex: 'pending',
-      },
-    ],
+    title: 'Total Antibody Tests (People)',
+    dataIndex: 'totalTestsPeopleAntibody',
   },
   {
-    title: 'Viral tests',
-    children: [
-      {
-        title: 'Positive cases',
-        dataIndex: 'positiveCasesViral',
-      },
-      {
-        title: 'Positive tests',
-        dataIndex: 'positiveTestsViral',
-      },
-      {
-        title: 'Negative tests',
-        dataIndex: 'negativeTestsViral',
-      },
-      {
-        title: 'Total',
-        dataIndex: 'totalTestsViral',
-      },
-    ],
+    title: 'Positive Antibody Tests (People)',
+    dataIndex: 'positiveTestsPeopleAntibody',
   },
   {
-    title: 'Hospitalized',
-    children: [
-      {
-        title: 'Currently',
-        dataIndex: 'hospitalizedCurrently',
-      },
-      {
-        title: 'Cumulative',
-        dataIndex: 'hospitalizedCumulative',
-      },
-    ],
+    title: 'Negative Antibody Tests (People)',
+    dataIndex: 'negativeTestsPeopleAntibody',
   },
   {
-    title: 'In ICU',
-    children: [
-      {
-        title: 'Currently',
-        dataIndex: 'inIcuCurrently',
-      },
-      {
-        title: 'Cumulative',
-        dataIndex: 'inIcuCumulative',
-      },
-    ],
+    title: 'Total Antigen Tests (People)',
+    dataIndex: 'totalTestsPeopleAntigen',
   },
   {
-    title: 'On Ventilator',
-    children: [
-      {
-        title: 'Currently',
-        dataIndex: 'onVentilatorCurrently',
-      },
-      {
-        title: 'Cumulative',
-        dataIndex: 'onVentilatorCumulative',
-      },
-    ],
+    title: 'Positive Antigen Tests (People)',
+    dataIndex: 'positiveTestsPeopleAntigen',
   },
   {
-    title: 'Outcomes',
-    children: [
-      {
-        title: 'Recovered',
-        dataIndex: 'recovered',
-      },
-      {
-        title: 'Death',
-        dataIndex: 'death',
-      },
-    ],
+    title: 'Negative Antigen Tests (People)',
+    dataIndex: 'negativeTestsPeopleAntigen',
   },
+  { title: 'Total Antigen Tests', dataIndex: 'totalTestsAntigen' },
+  { title: 'Positive Antigen Tests', dataIndex: 'positiveTestsAntigen' },
+  { title: 'Negative Antigen Tests', dataIndex: 'negativeTestsAntigen' },
 ].map((item) => {
   item.key = item.dataIndex
+  if (!item.width) {
+    item.width = 80
+  }
   return item
 })
 
@@ -257,11 +219,6 @@ export default ({ history, screenshots, state }) => {
         )
       }
     })
-    row._history = (
-      <Link href={`/state/${row.state.toLowerCase()}/history/${row.date}`}>
-        <a>History</a>
-      </Link>
-    )
     return row
   })
 
