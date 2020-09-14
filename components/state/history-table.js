@@ -89,7 +89,7 @@ const columns = [
 ].map((item) => {
   item.key = item.dataIndex
   if (!item.width) {
-    item.width = 80
+    item.width = 100
   }
   return item
 })
