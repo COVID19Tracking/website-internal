@@ -17,6 +17,8 @@ export default () => {
   tableColumns.unshift({
     title: 'Note',
     dataIndex: 'batch__batchNote',
+    key: 'batch__batchNote',
+    render: (note) => (note.length > 40 ? `${note.substr(0, 40)}...` : note),
   })
 
   useEffect(() => {
@@ -40,7 +42,8 @@ export default () => {
       .then((response) => response.json())
       .then((result) => {
         setHistory(
-          result.map((row) => {
+          result.map((row, index) => {
+            row.key = index
             Object.keys(row.batch).forEach((key) => {
               row[`batch__${key}`] = row.batch[key]
             })
@@ -71,6 +74,12 @@ export default () => {
           pagination={false}
           rowKey="date"
           scroll={{ x: 2300, y: 900 }}
+          expandable={{
+            expandedRowRender: (record) => (
+              <div className="expanded-note">{record.batch__batchNote}</div>
+            ),
+            rowExpandable: (record) => record.batch__batchNote,
+          }}
         />
       ) : (
         <Spin />
