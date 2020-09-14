@@ -14,22 +14,41 @@ export default () => {
   const router = useRouter()
   const { stateCode, date } = router.query
   const tableColumns = columns.filter((column) => !column.hideInBatch)
-  tableColumns.unshift({
-    title: 'User',
-    dataIndex: 'batch__user',
-    key: 'batch__user',
-  })
-  tableColumns.unshift({
-    title: 'Shift lead',
-    dataIndex: 'batch__shiftLead',
-    key: 'batch__shiftLead',
-  })
-  tableColumns.unshift({
-    title: 'Note',
-    dataIndex: 'batch__batchNote',
-    key: 'batch__batchNote',
-    render: (note) => (note.length > 40 ? `${note.substr(0, 40)}...` : note),
-  })
+  const batchTableColumns = [
+    {
+      title: 'Note',
+      dataIndex: 'batch__batchNote',
+      key: 'batch__batchNote',
+      render: (note) => (note.length > 40 ? `${note.substr(0, 40)}...` : note),
+    },
+    {
+      title: 'User',
+      dataIndex: 'batch__user',
+      key: 'batch__user',
+    },
+    {
+      title: 'Shift lead',
+      dataIndex: 'batch__shiftLead',
+      key: 'batch__shiftLead',
+    },
+    {
+      title: 'Batch link',
+      dataIndex: 'batch__link',
+      key: 'batch__link',
+      render: (note) =>
+        note ? (
+          <a
+            href="https://github.com/COVID19Tracking/issues/issues/813"
+            target="_blank"
+          >
+            Link
+          </a>
+        ) : (
+          'none'
+        ),
+    },
+    ...tableColumns,
+  ]
 
   useEffect(() => {
     if (!stateCode) {
@@ -80,7 +99,7 @@ export default () => {
       {history ? (
         <Table
           dataSource={history}
-          columns={tableColumns}
+          columns={batchTableColumns}
           pagination={false}
           rowKey="date"
           scroll={{ x: 2300, y: 900 }}
