@@ -179,17 +179,20 @@ export default ({ history, screenshots, state }) => {
   const [showDeltas, setShowDeltas] = useState(false)
   const [activeBatch, setActiveBatch] = useState(false)
   const [batch, setBatch] = useState(false)
+  const [stateBatch, setStateBatch] = useState(false)
+  const [batchDate, setBatchDate] = useState(false)
   const router = useRouter()
   columns[1].render = (batchId, record) => (
     <Button
       onClick={(event) => {
         event.preventDefault()
         setActiveBatch(batchId)
+        setBatchDate(record.date)
         fetch(`/api/batch?batch=${batchId}`)
           .then((result) => result.json())
           .then((batch) => {
-            console.log(batch)
-            setBatch(
+            setBatch(batch)
+            setStateBatch(
               batch.coreData.find(
                 (b) => b.state.toLowerCase() === state.toLowerCase(),
               ),
@@ -283,7 +286,7 @@ export default ({ history, screenshots, state }) => {
                 key="back"
                 onClick={(event) => {
                   router.push(
-                    `/state/${state.toLowerCase()}/history/${batch.date}`,
+                    `/state/${state.toLowerCase()}/history/${batchDate}`,
                   )
                 }}
               >
@@ -295,12 +298,10 @@ export default ({ history, screenshots, state }) => {
               <>
                 <h2>Batch {batch.batchId}</h2>
                 <p>
-                  <strong>Checker:</strong> {batch.checker}
+                  <strong>Shift lead:</strong> {batch.shiftLead}
                 </p>
-                <p>
-                  <strong>Double-checker:</strong> {batch.doubleChecker}
-                </p>
-                <div>{batch.privateNotes}</div>
+                <h3>Batch note</h3>
+                <div>{batch.batchNote}</div>
               </>
             ) : (
               <p>Loading</p>
