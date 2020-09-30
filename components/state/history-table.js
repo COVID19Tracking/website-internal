@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Button, Table, Tag, Spin, Card, Modal } from 'antd'
+import { Button, Modal, Table, Tag, Spin, Card } from 'antd'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
 import { DateTime } from 'luxon'
@@ -38,7 +39,10 @@ const columns = [
   { title: 'In ICU – Currently', dataIndex: 'inIcuCurrently' },
   { title: 'In ICU – Cumulative', dataIndex: 'inIcuCumulative' },
   { title: 'On Ventilator – Currently', dataIndex: 'onVentilatorCurrently' },
-  { title: 'On Ventilator – Cumulative', dataIndex: 'onVentilatorCumulative' },
+  {
+    title: 'On Ventilator – Cumulative',
+    dataIndex: 'onVentilatorCumulative',
+  },
   { title: 'Recovered', dataIndex: 'recovered' },
   { title: 'Deaths', dataIndex: 'death' },
   { title: 'Data Quality Grade', dataIndex: 'dataQualityGrade' },
@@ -173,6 +177,29 @@ const APIpreview = ({ date, state }) => (
 
 export default ({ history, screenshots, state }) => {
   const [showDeltas, setShowDeltas] = useState(false)
+  const [activeBatch, setActiveBatch] = useState(false)
+  const [batch, setBatch] = useState(false)
+  const router = useRouter()
+  columns[1].render = (batchId, record) => (
+    <Button
+      onClick={(event) => {
+        event.preventDefault()
+        setActiveBatch(batchId)
+        fetch(`/api/batch?batch=${batchId}`)
+          .then((result) => result.json())
+          .then((batch) => {
+            console.log(batch)
+            setBatch(
+              batch.coreData.find(
+                (b) => b.state.toLowerCase() === state.toLowerCase(),
+              ),
+            )
+          })
+      }}
+    >
+      {batchId}
+    </Button>
+  )
 
   const addColumns = (row) => {
     row._screenshotsPrimary = (
@@ -245,6 +272,40 @@ export default ({ history, screenshots, state }) => {
             rowKey="date"
             scroll={{ x: 2300, y: 900 }}
           />
+          <Modal
+            visible={activeBatch}
+            onCancel={() => {
+              setActiveBatch(false)
+              setBatch(false)
+            }}
+            footer={[
+              <Button
+                key="back"
+                onClick={(event) => {
+                  router.push(
+                    `/state/${state.toLowerCase()}/history/${batch.date}`,
+                  )
+                }}
+              >
+                View full history
+              </Button>,
+            ]}
+          >
+            {batch ? (
+              <>
+                <h2>Batch {batch.batchId}</h2>
+                <p>
+                  <strong>Checker:</strong> {batch.checker}
+                </p>
+                <p>
+                  <strong>Double-checker:</strong> {batch.doubleChecker}
+                </p>
+                <div>{batch.privateNotes}</div>
+              </>
+            ) : (
+              <p>Loading</p>
+            )}
+          </Modal>
         </div>
       )}
     </>
