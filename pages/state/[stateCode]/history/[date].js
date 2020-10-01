@@ -4,6 +4,7 @@ import { Typography, Spin, Table } from 'antd'
 import Layout from '../../../../components/layout'
 import Navigation from '../../../../components/state/navigation'
 import { columns } from '../../../../components/state/history-table'
+import { DateTime } from 'luxon'
 
 const { Title } = Typography
 
@@ -22,10 +23,12 @@ export default () => {
       fixed: 'left',
     },
     {
-      title: 'Batch ID',
-      dataIndex: 'batch__batchId',
-      width: 60,
+      title: 'Published',
+      dataIndex: 'batch__publishedAt',
+      key: 'batch__publishedAt',
+      width: 90,
       fixed: 'left',
+      render: (date) => DateTime.fromRFC2822(date).toISO(),
     },
     {
       title: 'Note',
