@@ -301,6 +301,16 @@ export default ({ history, screenshots, state }) => {
                 <p>
                   <strong>Shift lead:</strong> {batch.shiftLead}
                 </p>
+                {changedDates && (
+                  <p>
+                    <strong>Changed dates:</strong> {batch.changedDates}
+                  </p>
+                )}
+                {changedFields && (
+                  <p>
+                    <strong>Changed fields:</strong> {batch.changedFields}
+                  </p>
+                )}
                 {batch.link && (
                   <p>
                     <strong>Link:</strong>{' '}
