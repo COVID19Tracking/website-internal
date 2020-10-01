@@ -107,7 +107,7 @@ export default () => {
             paddingLeft: 18,
           }}
         >
-          {stateInfo.name}
+          {stateInfo.name} - {date}
         </h2>
       )}
       {history ? (
