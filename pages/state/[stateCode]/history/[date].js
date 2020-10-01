@@ -1,17 +1,61 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Typography, Spin, Table } from 'antd'
+import { Typography, Spin, Table, Button, Tag } from 'antd'
 import Layout from '../../../../components/layout'
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
 import Navigation from '../../../../components/state/navigation'
 import { columns } from '../../../../components/state/history-table'
 import { DateTime } from 'luxon'
 
 const { Title } = Typography
 
+const RowDiff = ({ item, field, previousRow }) => {
+  const getPercentage = (current, prior) =>
+    Math.round(((current - prior) / prior) * 100 * 10) / 10
+
+  if (!previousRow || !previousRow[field] || item === previousRow[field]) {
+    return <>{item.toLocaleString()}</>
+  }
+  if (item > previousRow[field]) {
+    return (
+      <>
+        {item.toLocaleString()}{' '}
+        <Tag className="diff" color="grey">
+          <ArrowUpOutlined alt="" aria-label="Number is up from prior day" />
+          {(item - previousRow[field]).toLocaleString()}{' '}
+          {getPercentage(item, previousRow[field])}%
+        </Tag>
+      </>
+    )
+  }
+  if (item < previousRow[field]) {
+    return (
+      <>
+        {item.toLocaleString()}{' '}
+        <Tag className="diff" color="#2db7f5">
+          <ArrowDownOutlined
+            alt=""
+            aria-label="Number is down from prior day"
+          />
+          {(previousRow[field] - item).toLocaleString()}{' '}
+          {getPercentage(item, previousRow[field])}%
+        </Tag>
+      </>
+    )
+  }
+  return (
+    <>
+      {item.toLocaleString()}
+      <strong>hw</strong>
+    </>
+  )
+}
+
 export default () => {
   const [stateInfo, setStateInfo] = useState(false)
   const [history, setHistory] = useState(false)
   const [production, setProduction] = useState(true)
+  const [showDeltas, setShowDeltas] = useState(false)
   const router = useRouter()
   const { stateCode, date } = router.query
   const tableColumns = columns.filter((column) => !column.hideInBatch)
@@ -95,11 +139,30 @@ export default () => {
     )
       .then((response) => response.json())
       .then((result) => {
+        const rows = result.map((row, index) => {
+          row.key = index
+          Object.keys(row.batch).forEach((key) => {
+            row[`batch__${key}`] = row.batch[key]
+          })
+          return row
+        })
+
         setHistory(
-          result.map((row, index) => {
-            row.key = index
-            Object.keys(row.batch).forEach((key) => {
-              row[`batch__${key}`] = row.batch[key]
+          rows.map((historyRow, index) => {
+            const row = { ...historyRow }
+            row.formattedDate = DateTime.fromISO(row.date).toFormat(
+              'ccc LLL d yyyy',
+            )
+            Object.keys(row).forEach((key) => {
+              if (typeof row[key] === 'number' && key.search('batch') === -1) {
+                row[key] = (
+                  <RowDiff
+                    item={row[key]}
+                    field={key}
+                    previousRow={rows[index + 1]}
+                  />
+                )
+              }
             })
             return row
           }),
@@ -126,19 +189,33 @@ export default () => {
         </h2>
       )}
       {history ? (
-        <Table
-          dataSource={history}
-          columns={batchTableColumns}
-          pagination={false}
-          rowKey="batch__batchId"
-          scroll={{ x: 2300, y: 900 }}
-          expandable={{
-            expandedRowRender: (record) => (
-              <div className="expanded-note">{record.batch__batchNote}</div>
-            ),
-            rowExpandable: (record) => record.batch__batchNote,
-          }}
-        />
+        <>
+          <p>
+            <Button
+              onClick={(event) => {
+                event.preventDefault()
+                setShowDeltas(!showDeltas)
+              }}
+            >
+              {showDeltas ? 'Hide daily changes' : 'Show daily changes'}
+            </Button>
+          </p>
+          <div className={showDeltas ? 'show-diff' : ''}>
+            <Table
+              dataSource={history}
+              columns={batchTableColumns}
+              pagination={false}
+              rowKey="batch__batchId"
+              scroll={{ x: 2300, y: 900 }}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <div className="expanded-note">{record.batch__batchNote}</div>
+                ),
+                rowExpandable: (record) => record.batch__batchNote,
+              }}
+            />
+          </div>
+        </>
       ) : (
         <Spin />
       )}
