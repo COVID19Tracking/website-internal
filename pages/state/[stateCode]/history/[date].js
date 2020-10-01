@@ -102,9 +102,13 @@ export default () => {
       setProduction={(newProduction) => setProduction(newProduction)}
     >
       {stateInfo !== false && (
-        <>
-          <Navigation stateInfo={stateInfo} />
-        </>
+        <h2
+          style={{
+            paddingLeft: 18,
+          }}
+        >
+          {stateInfo.name}
+        </h2>
       )}
       {history ? (
         <Table
