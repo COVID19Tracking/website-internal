@@ -170,7 +170,7 @@ const APIpreview = ({ date, state }) => (
   </>
 )
 
-export default ({ history, screenshots, state }) => {
+export default ({ history, screenshots, state, batchView }) => {
   const [showDeltas, setShowDeltas] = useState(false)
   const [activeBatch, setActiveBatch] = useState(false)
   const [batch, setBatch] = useState(false)
@@ -301,12 +301,12 @@ export default ({ history, screenshots, state }) => {
                 <p>
                   <strong>Shift lead:</strong> {batch.shiftLead}
                 </p>
-                {changedDates && (
+                {batch.changedDates && (
                   <p>
                     <strong>Changed dates:</strong> {batch.changedDates}
                   </p>
                 )}
-                {changedFields && (
+                {batch.changedFields && (
                   <p>
                     <strong>Changed fields:</strong> {batch.changedFields}
                   </p>

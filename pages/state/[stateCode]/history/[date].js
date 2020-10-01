@@ -22,6 +22,12 @@ export default () => {
       fixed: 'left',
     },
     {
+      title: 'Batch ID',
+      dataIndex: 'batch__batchId',
+      width: 60,
+      fixed: 'left',
+    },
+    {
       title: 'Note',
       dataIndex: 'batch__batchNote',
       key: 'batch__batchNote',
@@ -39,6 +45,12 @@ export default () => {
       dataIndex: 'batch__shiftLead',
       key: 'batch__shiftLead',
       width: 90,
+    },
+    {
+      title: 'Changed Fields',
+      dataIndex: 'batch__changedFields',
+      key: 'batch__changedFields',
+      width: 200,
     },
     {
       title: 'Batch link',
