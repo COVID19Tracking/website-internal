@@ -95,7 +95,7 @@ export default ({ title, children, production, setProduction }) => {
             <Content
               className="site-layout-background"
               style={{
-                padding: 24,
+                padding: 0,
                 margin: 0,
                 minHeight: 280,
               }}

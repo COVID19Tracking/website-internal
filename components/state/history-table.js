@@ -8,8 +8,8 @@ import { DateTime } from 'luxon'
 const columns = [
   {
     title: 'Date',
-    dataIndex: 'formattedDate',
-    width: 100,
+    dataIndex: 'date',
+    width: 150,
     fixed: 'left',
     hideInBatch: true,
   },
@@ -25,11 +25,6 @@ const columns = [
         <a>{batchId}</a>
       </Link>
     ),
-  },
-  {
-    title: 'API links',
-    dataIndex: '_api',
-    hideInBatch: true,
   },
   { title: 'Positive', dataIndex: 'positive' },
   { title: 'Negative', dataIndex: 'negative' },
@@ -93,7 +88,7 @@ const columns = [
 ].map((item) => {
   item.key = item.dataIndex
   if (!item.width) {
-    item.width = 100
+    item.width = 150
   }
   return item
 })
@@ -183,7 +178,7 @@ export default ({ history, screenshots, state }) => {
   const [batchDate, setBatchDate] = useState(false)
   const router = useRouter()
   columns[1].render = (batchId, record) => (
-    <Button
+    <a
       onClick={(event) => {
         event.preventDefault()
         setActiveBatch(batchId)
@@ -201,7 +196,7 @@ export default ({ history, screenshots, state }) => {
       }}
     >
       {batchId}
-    </Button>
+    </a>
   )
 
   const addColumns = (row) => {
@@ -290,7 +285,7 @@ export default ({ history, screenshots, state }) => {
                   )
                 }}
               >
-                View full history
+                View row history
               </Button>,
             ]}
           >
@@ -298,7 +293,24 @@ export default ({ history, screenshots, state }) => {
               <>
                 <h2>Batch {batch.batchId}</h2>
                 <p>
+                  <strong>Published at:</strong> {batch.publishedAt}
+                </p>
+                <p>
+                  <strong>User:</strong> {batch.user}
+                </p>
+                <p>
                   <strong>Shift lead:</strong> {batch.shiftLead}
+                </p>
+                {batch.link && (
+                  <p>
+                    <strong>Link:</strong>{' '}
+                    <a href={batch.link} target="_blank">
+                      Open
+                    </a>
+                  </p>
+                )}
+                <p>
+                  <strong>Log category:</strong> {batch.logCategory}
                 </p>
                 <h3>Batch note</h3>
                 <div>{batch.batchNote}</div>

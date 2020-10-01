@@ -60,61 +60,22 @@ export default () => {
     >
       {stateInfo !== false && (
         <>
-          <Navigation stateInfo={stateInfo} />
-          <Row gutter={16} style={{ marginBottom: '2rem', marginTop: '2rem' }}>
-            <Col span={6}>
-              {stateInfo !== false && (
-                <Card title="API links">
-                  <p>
-                    <strong>Live</strong>{' '}
-                    <a
-                      href={`https://api.covidtracking.com/v1/states/${stateCode}/daily.csv`}
-                      target="_blank"
-                    >
-                      CSV
-                    </a>{' '}
-                    |{' '}
-                    <a
-                      href={`https://api.covidtracking.com/v1/states/${stateCode}/daily.json`}
-                      target="_blank"
-                    >
-                      JSON
-                    </a>
-                  </p>
-                  <p>
-                    <strong>Preview</strong>{' '}
-                    <a href={`/api/state?state=${stateCode}`} target="_blank">
-                      JSON
-                    </a>
-                  </p>
-                </Card>
-              )}
-            </Col>
-            <Col span={18}>
-              <Card title="Notes">
-                {stateInfo.notes ? (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: marked(stateInfo.notes),
-                    }}
-                  />
-                ) : (
-                  <>No notes</>
-                )}
-              </Card>
-            </Col>
-          </Row>
+          <h2
+            style={{
+              paddingLeft: 18,
+            }}
+          >
+            {stateInfo.name}
+          </h2>
+          {history && screenshots && (
+            <HistoryTable
+              history={history}
+              screenshots={screenshots}
+              state={stateCode}
+            />
+          )}
         </>
       )}
-      <Card title="History" loading={!(history && screenshots)}>
-        {history && screenshots && (
-          <HistoryTable
-            history={history}
-            screenshots={screenshots}
-            state={stateCode}
-          />
-        )}
-      </Card>
     </Layout>
   )
 }
