@@ -12,6 +12,13 @@ const columns = [
     width: 150,
     fixed: 'left',
     hideInBatch: true,
+    render: (date, record) => (
+      <Link
+        href={`/state/${record.state.toLowerCase()}/history/${record.date}`}
+      >
+        <a>{date}</a>
+      </Link>
+    ),
   },
   {
     title: 'Batch',
