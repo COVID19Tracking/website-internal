@@ -70,9 +70,9 @@ export default () => {
       title: 'Published',
       dataIndex: 'batch__publishedAt',
       key: 'batch__publishedAt',
-      width: 90,
+      width: 200,
       fixed: 'left',
-      render: (date) => DateTime.fromRFC2822(date).toISO(),
+      render: (date) => DateTime.fromRFC2822(date).toFormat('f'),
     },
     {
       title: 'Note',
@@ -206,6 +206,7 @@ export default () => {
               columns={batchTableColumns}
               pagination={false}
               rowKey="batch__batchId"
+              size="small"
               scroll={{ x: 2300, y: 900 }}
               expandable={{
                 expandedRowRender: (record) => (

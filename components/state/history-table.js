@@ -276,6 +276,7 @@ export default ({ history, screenshots, state, batchView }) => {
             pagination={false}
             rowKey="date"
             scroll={{ x: 2300, y: 900 }}
+            size="small"
           />
           <Modal
             visible={activeBatch}
