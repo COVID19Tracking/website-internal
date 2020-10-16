@@ -11,13 +11,13 @@ export default function Home() {
   const [previewCurrent, setPreviewCurrent] = useState(false)
 
   useEffect(() => {
-    fetch('/api/us')
+    fetch('/api/us?production=true')
       .then((response) => response.json())
       .then((result) => {
         setHistory(result)
         setCurrent(result.sort((a, b) => (a.date < b.date ? 1 : -1)).shift())
       })
-    fetch('/api/us?preview')
+    fetch('/api/us')
       .then((response) => response.json())
       .then((result) => {
         setPreview(result)
