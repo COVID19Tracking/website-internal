@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { Button, Modal, Table, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  AlertOutlined,
+} from '@ant-design/icons'
 import { DateTime } from 'luxon'
 
 const columns = [
@@ -103,9 +107,19 @@ const columns = [
 const RowDiff = ({ item, field, previousRow }) => {
   const getPercentage = (current, prior) =>
     Math.round(((current - prior) / prior) * 100 * 10) / 10
-
-  if (!previousRow || !previousRow[field] || item === previousRow[field]) {
+  if (!previousRow || item === previousRow[field]) {
     return <>{item.toLocaleString()}</>
+  }
+  if (item && !previousRow[field]) {
+    return (
+      <>
+        {item.toLocaleString()}{' '}
+        <Tag className="diff" color="#87d068">
+          <AlertOutlined alt="" aria-label="Number is new" />
+          New value
+        </Tag>
+      </>
+    )
   }
   if (item > previousRow[field]) {
     return (
@@ -134,12 +148,7 @@ const RowDiff = ({ item, field, previousRow }) => {
       </>
     )
   }
-  return (
-    <>
-      {item.toLocaleString()}
-      <strong>hw</strong>
-    </>
-  )
+  return <>{item.toLocaleString()}</>
 }
 
 const Screenshots = ({ screenshots }) => {
