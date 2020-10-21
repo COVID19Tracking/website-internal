@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Card, Space, Spin, Row, Col, Statistic } from 'antd'
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
+import { ArrowUpOutlined } from '@ant-design/icons'
 import { DateTime } from 'luxon'
 import Layout from '../components/layout'
 
 export default function Home() {
-  const [history, setHistory] = useState(false)
-  const [preview, setPreview] = useState(false)
   const [current, setCurrent] = useState(false)
   const [previewCurrent, setPreviewCurrent] = useState(false)
 
@@ -14,13 +12,11 @@ export default function Home() {
     fetch('/api/us?production=true')
       .then((response) => response.json())
       .then((result) => {
-        setHistory(result)
         setCurrent(result.sort((a, b) => (a.date < b.date ? 1 : -1)).shift())
       })
     fetch('/api/us')
       .then((response) => response.json())
       .then((result) => {
-        setPreview(result)
         setPreviewCurrent(
           result.sort((a, b) => (a.date < b.date ? 1 : -1)).shift(),
         )
@@ -52,7 +48,7 @@ export default function Home() {
   }
 
   return (
-    <Layout title="Home">
+    <Layout title="Home" margin>
       {current && previewCurrent ? (
         <>
           <h1>

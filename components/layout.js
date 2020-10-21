@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Layout, Menu, Switch } from 'antd'
+import Head from 'next/head'
 import { LeftOutlined, MenuOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import states from '../_api/v1/states/info.json'
 
 const { Sider, Content } = Layout
 
-export default ({ title, children, production, setProduction }) => {
+export default ({ title, margin, children, production, setProduction }) => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [hideSidebar, setHideSidebar] = useState(false)
 
@@ -21,6 +22,9 @@ export default ({ title, children, production, setProduction }) => {
 
   return (
     <Layout>
+      <Head>
+        <title>{title}</title>
+      </Head>
       {loggedIn ? (
         <>
           {hideSidebar ? (
@@ -96,7 +100,7 @@ export default ({ title, children, production, setProduction }) => {
               className="site-layout-background"
               style={{
                 padding: 0,
-                margin: 0,
+                margin: margin ? '2rem': 0,
                 minHeight: 280,
               }}
             >
