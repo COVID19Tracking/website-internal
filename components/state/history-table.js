@@ -283,8 +283,11 @@ export default ({ history, screenshots, state, batchView }) => {
             dataSource={tableData}
             columns={columns}
             pagination={false}
+            style={{
+              maxHeight: "90vh"
+            }}
             rowKey="date"
-            scroll={{ x: 2300, y: 900 }}
+            scroll={{ x: 2300, y: "80vh" }}
             size="small"
           />
           <Modal
