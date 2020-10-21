@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Button, Modal, Table, Tag, Spin, Card } from 'antd'
+import { useState } from 'react'
+import { Button, Modal, Table, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
