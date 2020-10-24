@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "COVID_INTERNAL_DISABLE_AUTH=true next dev",
     "build": "next build",
     "start": "next start",
     "postbuild": "next-on-netlify",
