@@ -30,7 +30,11 @@ export default function Home() {
           title={title}
           value={current[field]}
           prefix={<ArrowUpOutlined />}
-          suffix={`Preview: ${previewCurrent[field].toLocaleString()}`}
+          suffix={`Preview: ${
+            previewCurrent[field]
+              ? previewCurrent[field].toLocaleString()
+              : 'N/A'
+          }`}
         />
       )
     }
@@ -40,7 +44,11 @@ export default function Home() {
           title={title}
           value={current[field]}
           prefix={<ArrowUpOutlined />}
-          suffix={`Preview: ${previewCurrent[field].toLocaleString()}`}
+          suffix={`Preview: ${
+            previewCurrent[field]
+              ? previewCurrent[field].toLocaleString()
+              : 'N/A'
+          }`}
         />
       )
     }
