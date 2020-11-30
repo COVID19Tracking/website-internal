@@ -75,7 +75,11 @@ export default function Screenshot() {
             />
           </Form.Item>
           <Form.Item label="State" name="state">
-            <Select showSearch onChange={(state) => setState(state)}>
+            <Select
+              showSearch
+              onChange={(state) => setState(state)}
+              style={{ width: 300 }}
+            >
               {states.map((state) => (
                 <Option value={state.state}>{state.name}</Option>
               ))}
