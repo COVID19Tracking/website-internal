@@ -15,6 +15,8 @@
     "antd": "^4.3.3",
     "color": "^3.1.2",
     "crypto-js": "^4.0.0",
+    "filestack-js": "^3.20.0",
+    "filestack-react": "^3.2.1",
     "less": "^3.11.3",
     "luxon": "^1.24.1",
     "marked": "^1.1.0",
@@ -26,6 +28,7 @@
     "randomcolor": "^0.5.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "recharts": "^1.8.5"
+    "recharts": "^1.8.5",
+    "slugify": "^1.4.6"
   }
 }
