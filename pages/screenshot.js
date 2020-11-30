@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Card, Select, Form, Radio, DatePicker } from 'antd'
+import { Card, Select, Form, Radio, Alert, DatePicker } from 'antd'
 import * as filestack from 'filestack-js'
 import moment from 'moment'
 import states from '../_api/v1/states/info.json'
@@ -117,6 +117,12 @@ export default function Screenshot() {
             )}
           </Form.Item>
           <Form.Item>
+            {!state && (
+              <Alert
+                message="Select a state to upload a screenshot."
+                type="warning"
+              />
+            )}
             <div id="filepicker" style={{ width: 500, height: 300 }} />
           </Form.Item>
         </Form>
