@@ -23,6 +23,7 @@ export default function Screenshot() {
   const [dataType, setDataType] = useState('core')
   const [coreDataType, setCoreDataType] = useState('state-link')
   const [dateTime, setDateTime] = useState(moment())
+  const [success, setSuccess] = useState(false)
   const filePickerRef = useRef(false)
 
   useEffect(() => {
@@ -49,6 +50,10 @@ export default function Screenshot() {
           }${dateTime.format('YYYYMMDD-HHmmss')}.png`,
         }
       },
+      onUploadDone: (res) => {
+        setSuccess(true)
+        setState(false)
+      },
       storeTo: {
         location: 's3',
         path: `/screenshots/${state}/manual/`,
@@ -60,6 +65,14 @@ export default function Screenshot() {
     filePickerRef.current = client.picker(options)
     filePickerRef.current.open()
   }, [state, dateTime, dataType])
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(false)
+      }, 4000)
+    }
+  }, [success])
   return (
     <Layout title="Upload screenshot" margin>
       <Card title="Upload">
@@ -121,6 +134,7 @@ export default function Screenshot() {
             )}
           </Form.Item>
           <Form.Item>
+            {success && <Alert message="Screenshot uploaded" type="success" />}
             {!state && (
               <Alert
                 message="Select a state to upload a screenshot."
