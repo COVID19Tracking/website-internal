@@ -36,10 +36,10 @@ export default function Screenshot() {
       maxFiles: 1,
       fromSources: ['local_file_system'],
       uploadInBackground: false,
-      accept: ['image/*'],
       disableStorageKey: true,
       onFileSelected(file) {
         // It's important to return a new file by the end of this function.
+        console.log(file)
         return {
           ...file,
           name: `${state}-${
