@@ -5,6 +5,7 @@ import moment from 'moment'
 import states from '../_api/v1/states/info.json'
 import Layout from '../components/layout'
 import slugify from 'slugify'
+import url from 'url'
 
 const { Option } = Select
 
@@ -20,10 +21,30 @@ const coreDataTypes = [
 
 export default function Screenshot() {
   const [state, setState] = useState(false)
+  const [defaultState, setDefaultState] = useState(false)
+  const [defaultDataType, setDefaultDataType] = useState(false)
   const [dataType, setDataType] = useState('core')
   const [coreDataType, setCoreDataType] = useState('state-link')
   const [dateTime, setDateTime] = useState(moment())
   const filePickerRef = useRef(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+    const address = url.parse(window.location.href, true)
+    if (address.query.state) {
+      setDefaultState(address.query.state)
+      setState(address.query.state)
+    }
+    if (address.query.datatype) {
+      setDefaultDataType(address.query.datatype)
+      setDataType(address.query.datatype)
+    }
+    if (address.query.subtype) {
+      setCoreDataType(address.query.subtype)
+    }
+  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined' || !state) {
@@ -60,6 +81,7 @@ export default function Screenshot() {
     filePickerRef.current = client.picker(options)
     filePickerRef.current.open()
   }, [state, dateTime, dataType])
+
   return (
     <Layout title="Upload screenshot" margin>
       <Card title="Upload">
@@ -75,14 +97,23 @@ export default function Screenshot() {
             />
           </Form.Item>
           <Form.Item label="State" name="state">
-            <Select showSearch onChange={(state) => setState(state)}>
+            <Select
+              showSearch
+              onChange={(state) => setState(state)}
+              style={{ width: 300 }}
+            >
               {states.map((state) => (
-                <Option value={state.state}>{state.name}</Option>
+                <Option value={state.state} key={state.state}>
+                  {state.name}
+                </Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item label="Data type" name="data-type">
-            <Radio.Group onChange={(event) => setDataType(event.target.value)}>
+            <Radio.Group
+              value={dataType}
+              onChange={(event) => setDataType(event.target.value)}
+            >
               <Radio value="core">T&amp;O</Radio>
               <Radio value="crdt">CRDT</Radio>
               <Radio value="ltc">LTC</Radio>
