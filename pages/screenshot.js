@@ -23,6 +23,7 @@ export default function Screenshot() {
   const [state, setState] = useState(false)
   const [defaultState, setDefaultState] = useState(false)
   const [defaultDataType, setDefaultDataType] = useState(false)
+  const [defaultCoreDataType, setDefaultCoreDataType] = useState(false)
   const [dataType, setDataType] = useState('core')
   const [coreDataType, setCoreDataType] = useState('state-link')
   const [dateTime, setDateTime] = useState(moment())
@@ -43,6 +44,7 @@ export default function Screenshot() {
     }
     if (address.query.subtype) {
       setCoreDataType(address.query.subtype)
+      setDefaultCoreDataType(address.query.subtype)
     }
   }, [])
 
@@ -59,8 +61,6 @@ export default function Screenshot() {
       uploadInBackground: false,
       disableStorageKey: true,
       onFileSelected(file) {
-        // It's important to return a new file by the end of this function.
-        console.log(file)
         return {
           ...file,
           name: `${state}-${
@@ -100,6 +100,7 @@ export default function Screenshot() {
             <Select
               showSearch
               onChange={(state) => setState(state)}
+              defaultValue={defaultState}
               style={{ width: 300 }}
             >
               {states.map((state) => (
@@ -113,8 +114,9 @@ export default function Screenshot() {
             <Radio.Group
               value={dataType}
               onChange={(event) => setDataType(event.target.value)}
+              defaultValue={defaultDataType}
             >
-              <Radio value="core">T&amp;O</Radio>
+              <Radio value="core">TACO</Radio>
               <Radio value="crdt">CRDT</Radio>
               <Radio value="ltc">LTC</Radio>
             </Radio.Group>
@@ -123,6 +125,7 @@ export default function Screenshot() {
             <Form.Item label="Core data subtype" name="data-sub-type">
               <Radio.Group
                 onChange={(event) => setCoreDataType(event.target.value)}
+                defaultValue={defaultCoreDataType}
               >
                 {coreDataTypes.map((type) => (
                   <Radio value={slugify(type, { lower: true })}>{type}</Radio>
