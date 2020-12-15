@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Card, Select, Form, Radio, DatePicker } from 'antd'
+import { Card, Select, Form, Radio, DatePicker, Alert } from 'antd'
 import * as filestack from 'filestack-js'
 import moment from 'moment'
 import states from '../_api/v1/states/info.json'
@@ -27,7 +27,16 @@ export default function Screenshot() {
   const [dataType, setDataType] = useState('taco')
   const [coreDataType, setCoreDataType] = useState('state-link')
   const [dateTime, setDateTime] = useState(moment())
+  const [success, setSuccess] = useState(false)
   const filePickerRef = useRef(false)
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        setSuccess(false)
+      }, 3000)
+    }
+  }, [success])
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -60,6 +69,9 @@ export default function Screenshot() {
       fromSources: ['local_file_system'],
       uploadInBackground: false,
       disableStorageKey: true,
+      onUploadDone() {
+        setSuccess(true)
+      },
       onFileSelected(file) {
         return {
           ...file,
@@ -149,6 +161,7 @@ export default function Screenshot() {
                 </code>
               </p>
             )}
+            {success && <Alert type="success" message="Upload successful" />}
           </Form.Item>
           <Form.Item>
             <div id="filepicker" style={{ width: 500, height: 300 }} />
