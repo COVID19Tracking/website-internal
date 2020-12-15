@@ -10,13 +10,13 @@ import url from 'url'
 const { Option } = Select
 
 const coreDataTypes = [
-  'State Link',
-  'Dashboard',
-  'State Page',
+  'Primary Source',
+  'Data Dashboard',
+  'Official COVID Website',
   'State Social Media',
   'Press Conferences',
   'GIS Query',
-  'Other link',
+  'Other source',
 ]
 
 export default function Screenshot() {
