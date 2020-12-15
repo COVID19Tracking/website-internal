@@ -72,7 +72,7 @@ export default function Screenshot() {
       },
       storeTo: {
         location: 's3',
-        path: `/screenshots/${state}/manual/`,
+        path: `/state_screenshots/${state}/manual/`,
       },
     }
     if (filePickerRef.current) {
@@ -139,7 +139,7 @@ export default function Screenshot() {
               <p>
                 Filename:{' '}
                 <code>
-                  /screenshots/{state}/manual/{state}-
+                  /state_screenshots/{state}/manual/{state}-
                   {dataType === 'taco' ? (
                     <>{coreDataType}-</>
                   ) : (
