@@ -24,7 +24,7 @@ export default function Screenshot() {
   const [defaultState, setDefaultState] = useState(false)
   const [defaultDataType, setDefaultDataType] = useState(false)
   const [defaultCoreDataType, setDefaultCoreDataType] = useState(false)
-  const [dataType, setDataType] = useState('core')
+  const [dataType, setDataType] = useState('taco')
   const [coreDataType, setCoreDataType] = useState('state-link')
   const [dateTime, setDateTime] = useState(moment())
   const filePickerRef = useRef(false)
@@ -64,7 +64,7 @@ export default function Screenshot() {
         return {
           ...file,
           name: `${state}-${
-            dataType === 'core'
+            dataType === 'taco'
               ? `${coreDataType}-`
               : `${dataType.toLowerCase()}-`
           }${dateTime.format('YYYYMMDD-HHmmss')}.png`,
@@ -116,13 +116,13 @@ export default function Screenshot() {
               onChange={(event) => setDataType(event.target.value)}
               defaultValue={defaultDataType}
             >
-              <Radio value="core">TACO</Radio>
+              <Radio value="taco">TACO</Radio>
               <Radio value="crdt">CRDT</Radio>
               <Radio value="ltc">LTC</Radio>
             </Radio.Group>
           </Form.Item>
-          {dataType === 'core' && (
-            <Form.Item label="Core data subtype" name="data-sub-type">
+          {dataType === 'taco' && (
+            <Form.Item label="TACO data subtype" name="data-sub-type">
               <Radio.Group
                 onChange={(event) => setCoreDataType(event.target.value)}
                 defaultValue={defaultCoreDataType}
@@ -140,7 +140,7 @@ export default function Screenshot() {
                 Filename:{' '}
                 <code>
                   /screenshots/{state}/manual/{state}-
-                  {dataType === 'core' ? (
+                  {dataType === 'taco' ? (
                     <>{coreDataType}-</>
                   ) : (
                     <>{dataType.toLowerCase()}-</>
