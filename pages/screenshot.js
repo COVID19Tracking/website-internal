@@ -73,13 +73,14 @@ export default function Screenshot() {
         setSuccess(true)
       },
       onFileSelected(file) {
+        const suffix = file.originalFile.split('.').pop()
         return {
           ...file,
           name: `${state}-${
             dataType === 'taco'
               ? `${coreDataType}-`
               : `${dataType.toLowerCase()}-`
-          }${dateTime.format('YYYYMMDD-HHmmss')}.png`,
+          }${dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
         }
       },
       storeTo: {
