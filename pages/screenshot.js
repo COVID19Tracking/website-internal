@@ -73,7 +73,7 @@ export default function Screenshot() {
         setSuccess(true)
       },
       onFileSelected(file) {
-        const suffix = file.originalFile.split('.').pop()
+        const suffix = file.originalFile.name.split('.').pop()
         return {
           ...file,
           name: `${state}-${
