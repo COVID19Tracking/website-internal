@@ -25,10 +25,20 @@ export default function Screenshot() {
   const [defaultDataType, setDefaultDataType] = useState(false)
   const [defaultCoreDataType, setDefaultCoreDataType] = useState(false)
   const [dataType, setDataType] = useState('taco')
-  const [coreDataType, setCoreDataType] = useState('state-link')
+  const [coreDataType, setCoreDataType] = useState(false)
   const [dateTime, setDateTime] = useState(moment())
   const [success, setSuccess] = useState(false)
   const filePickerRef = useRef(false)
+  const fileValues = useRef({})
+
+  useEffect(() => {
+    fileValues.current = {
+      state,
+      dataType,
+      coreDataType,
+      dateTime,
+    }
+  }, [state, dateTime, dataType, coreDataType])
 
   useEffect(() => {
     if (success) {
@@ -58,7 +68,7 @@ export default function Screenshot() {
   }, [])
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !state) {
+    if (typeof window === 'undefined') {
       return
     }
     const client = filestack.init('A1A13ZY4SSAm4lBR3j4X8z')
@@ -76,11 +86,11 @@ export default function Screenshot() {
         const suffix = file.originalFile.name.split('.').pop()
         return {
           ...file,
-          name: `${state}-${
+          name: `${fileValues.current.state}-${
             dataType === 'taco'
-              ? `${coreDataType}-`
-              : `${dataType.toLowerCase()}-`
-          }${dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
+              ? `${fileValues.current.coreDataType}-`
+              : `${fileValues.current.dataType.toLowerCase()}-`
+          }${fileValues.current.dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
         }
       },
       storeTo: {
@@ -93,7 +103,7 @@ export default function Screenshot() {
     }
     filePickerRef.current = client.picker(options)
     filePickerRef.current.open()
-  }, [state, dateTime, dataType])
+  }, [])
 
   return (
     <Layout title="Upload screenshot" margin>
