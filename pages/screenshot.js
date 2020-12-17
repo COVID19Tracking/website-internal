@@ -95,7 +95,7 @@ export default function Screenshot() {
       },
       storeTo: {
         location: 's3',
-        path: `/state_screenshots/${state}/manual/`,
+        path: `/state_screenshots/${fileValues.current.state}/manual/`,
       },
     }
     if (filePickerRef.current) {
