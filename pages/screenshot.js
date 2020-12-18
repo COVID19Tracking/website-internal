@@ -30,6 +30,7 @@ export default function Screenshot() {
   const [success, setSuccess] = useState(false)
   const filePickerRef = useRef(false)
   const fileValues = useRef({})
+  const client = filestack.init('A1A13ZY4SSAm4lBR3j4X8z')
 
   useEffect(() => {
     fileValues.current = {
@@ -67,11 +68,23 @@ export default function Screenshot() {
     }
   }, [])
 
+  const onFileSelected = (file) => {
+    const suffix = file.originalFile.name.split('.').pop()
+    return {
+      ...file,
+      name: `${state}-${
+        dataType === 'taco' ? `${coreDataType}-` : `${dataType.toLowerCase()}-`
+      }${dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
+    }
+  }
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
     }
-    const client = filestack.init('A1A13ZY4SSAm4lBR3j4X8z')
+    if (filePickerRef.current) {
+      filePickerRef.current.close()
+    }
     const options = {
       displayMode: 'inline',
       container: '#filepicker',
@@ -82,28 +95,17 @@ export default function Screenshot() {
       onUploadDone() {
         setSuccess(true)
       },
-      onFileSelected(file) {
-        const suffix = file.originalFile.name.split('.').pop()
-        return {
-          ...file,
-          name: `${fileValues.current.state}-${
-            dataType === 'taco'
-              ? `${fileValues.current.coreDataType}-`
-              : `${fileValues.current.dataType.toLowerCase()}-`
-          }${fileValues.current.dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
-        }
+      onFileSelected: (file) => {
+        return onFileSelected(file)
       },
       storeTo: {
         location: 's3',
-        path: `/state_screenshots/${fileValues.current.state}/manual/`,
+        path: `/state_screenshots/${state}/manual/`,
       },
-    }
-    if (filePickerRef.current) {
-      filePickerRef.current = false
     }
     filePickerRef.current = client.picker(options)
     filePickerRef.current.open()
-  }, [])
+  }, [state, dateTime, dataType, coreDataType])
 
   return (
     <Layout title="Upload screenshot" margin>
