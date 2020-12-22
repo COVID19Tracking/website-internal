@@ -20,26 +20,32 @@ const coreDataTypes = [
 ]
 
 export default function Screenshot() {
-  const [state, setState] = useState(false)
-  const [defaultState, setDefaultState] = useState(false)
-  const [defaultDataType, setDefaultDataType] = useState(false)
-  const [defaultCoreDataType, setDefaultCoreDataType] = useState(false)
-  const [dataType, setDataType] = useState('taco')
-  const [coreDataType, setCoreDataType] = useState(false)
+
+  let qsState = false
+  let qsDataType = 'taco'
+  let qsSubType = false
+
+  const address = url.parse(window.location.href, true)
+  if (address.query.state) {
+    qsState = address.query.state
+  }
+  if (address.query.datatype) {
+    qsDataType = address.query.datatype
+  }
+  if (address.query.subtype) {
+    qsSubType = address.query.subtype
+  }
+
+  const [state, setState] = useState(qsState)
+  const [defaultState, setDefaultState] = useState(qsState)
+  const [defaultDataType, setDefaultDataType] = useState(qsDataType)
+  const [defaultCoreDataType, setDefaultCoreDataType] = useState(qsSubType)
+  const [dataType, setDataType] = useState(qsDataType)
+  const [coreDataType, setCoreDataType] = useState(qsSubType)
   const [dateTime, setDateTime] = useState(moment())
   const [success, setSuccess] = useState(false)
   const filePickerRef = useRef(false)
-  const fileValues = useRef({})
   const client = filestack.init('A1A13ZY4SSAm4lBR3j4X8z')
-
-  useEffect(() => {
-    fileValues.current = {
-      state,
-      dataType,
-      coreDataType,
-      dateTime,
-    }
-  }, [state, dateTime, dataType, coreDataType])
 
   useEffect(() => {
     if (success) {
@@ -48,25 +54,6 @@ export default function Screenshot() {
       }, 3000)
     }
   }, [success])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-    const address = url.parse(window.location.href, true)
-    if (address.query.state) {
-      setDefaultState(address.query.state)
-      setState(address.query.state)
-    }
-    if (address.query.datatype) {
-      setDefaultDataType(address.query.datatype)
-      setDataType(address.query.datatype)
-    }
-    if (address.query.subtype) {
-      setCoreDataType(address.query.subtype)
-      setDefaultCoreDataType(address.query.subtype)
-    }
-  }, [])
 
   const onFileSelected = (file) => {
     const address = url.parse(window.location.href, true)
