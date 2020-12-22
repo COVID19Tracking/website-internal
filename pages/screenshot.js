@@ -69,11 +69,13 @@ export default function Screenshot() {
   }, [])
 
   const onFileSelected = (file) => {
+    const address = url.parse(window.location.href, true)
+
     const suffix = file.originalFile.name.split('.').pop()
     return {
       ...file,
-      name: `${state}-${
-        dataType === 'taco' ? `${coreDataType}-` : `${dataType.toLowerCase()}-`
+      name: `${address.query.state}-${
+        address.query.datatype === 'taco' ? `${address.query.subtype}-` : `${address.query.datatype.toLowerCase()}-`
       }${dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
     }
   }
@@ -85,6 +87,9 @@ export default function Screenshot() {
     if (filePickerRef.current) {
       filePickerRef.current.close()
     }
+
+    const address = url.parse(window.location.href, true)
+
     const options = {
       displayMode: 'inline',
       container: '#filepicker',
@@ -100,9 +105,10 @@ export default function Screenshot() {
       },
       storeTo: {
         location: 's3',
-        path: `/state_screenshots/${state}/manual/`,
+        path: `/state_screenshots/${address.query.state}/manual/`,
       },
     }
+    console.log(`setting ${address.query.state}`)
     filePickerRef.current = client.picker(options)
     filePickerRef.current.open()
   }, [state, dateTime, dataType, coreDataType])
