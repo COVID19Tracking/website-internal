@@ -72,7 +72,6 @@ export default function Screenshot() {
     if (filePickerRef.current) {
       filePickerRef.current.close()
     }
-
     const options = {
       displayMode: 'inline',
       container: '#filepicker',
@@ -91,7 +90,6 @@ export default function Screenshot() {
         path: `/state_screenshots/${state}/manual/`,
       },
     }
-    console.log(`setting ${address.query.state}`)
     filePickerRef.current = client.picker(options)
     filePickerRef.current.open()
   }, [state, dateTime, dataType, coreDataType])
