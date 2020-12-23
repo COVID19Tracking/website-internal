@@ -21,6 +21,10 @@ const coreDataTypes = [
 
 export default function Screenshot() {
 
+  if (typeof window === 'undefined') {
+    return
+  }
+
   let qsState = false
   let qsDataType = 'taco'
   let qsSubType = false
