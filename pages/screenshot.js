@@ -21,23 +21,21 @@ const coreDataTypes = [
 
 export default function Screenshot() {
 
-  if (typeof window === 'undefined') {
-    return
-  }
-
   let qsState = false
   let qsDataType = 'taco'
   let qsSubType = false
 
-  const address = url.parse(window.location.href, true)
-  if (address.query.state) {
-    qsState = address.query.state
-  }
-  if (address.query.datatype) {
-    qsDataType = address.query.datatype
-  }
-  if (address.query.subtype) {
-    qsSubType = address.query.subtype
+  if (typeof window !== 'undefined') {
+    const address = url.parse(window.location.href, true)
+    if (address.query.state) {
+      qsState = address.query.state
+    }
+    if (address.query.datatype) {
+      qsDataType = address.query.datatype
+    }
+    if (address.query.subtype) {
+      qsSubType = address.query.subtype
+    }
   }
 
   const [state, setState] = useState(qsState)
@@ -70,9 +68,7 @@ export default function Screenshot() {
   }
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
+
     if (filePickerRef.current) {
       filePickerRef.current.close()
     }
