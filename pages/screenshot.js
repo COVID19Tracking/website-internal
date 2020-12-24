@@ -20,7 +20,6 @@ const coreDataTypes = [
 ]
 
 export default function Screenshot() {
-
   let qsState = false
   let qsDataType = 'taco'
   let qsSubType = false
@@ -39,9 +38,9 @@ export default function Screenshot() {
   }
 
   const [state, setState] = useState(qsState)
-  const [defaultState, setDefaultState] = useState(qsState)
-  const [defaultDataType, setDefaultDataType] = useState(qsDataType)
-  const [defaultCoreDataType, setDefaultCoreDataType] = useState(qsSubType)
+  const [defaultState] = useState(qsState)
+  const [defaultDataType] = useState(qsDataType)
+  const [defaultCoreDataType] = useState(qsSubType)
   const [dataType, setDataType] = useState(qsDataType)
   const [coreDataType, setCoreDataType] = useState(qsSubType)
   const [dateTime, setDateTime] = useState(moment())
@@ -68,7 +67,6 @@ export default function Screenshot() {
   }
 
   useEffect(() => {
-
     if (filePickerRef.current) {
       filePickerRef.current.close()
     }
