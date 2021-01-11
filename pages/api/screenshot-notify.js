@@ -2,7 +2,7 @@ import { WebClient } from '@slack/web-api'
 import { DateTime } from 'luxon'
 import validateCookie from '../../lib/validate-cookie'
 
-const channel = 'C015E7CR35X'
+const channel = process.env.COVID_INTERNAL_SLACK_CHANNEL
 
 export default async (req, res, context) => {
   if (!validateCookie(req)) {
