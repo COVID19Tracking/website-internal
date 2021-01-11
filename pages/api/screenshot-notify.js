@@ -12,8 +12,7 @@ export default async (req, res, context) => {
   }
 
   const { covidUser } = req.cookies
-  covidUser.split(':')
-  const user = covidUser[0]
+  const user = covidUser.split(':')[0]
 
   const startThread = `--- Manual Screenshots ${DateTime.local().toFormat(
     'LL/dd/yy',
