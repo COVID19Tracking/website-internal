@@ -18,6 +18,7 @@ export default async (req, res, context) => {
     'LL/dd/yy',
   )} ---`
   const web = new WebClient(process.env.COVID_INTERNAL_SLACK_TOKEN)
+  const slackUser = await web.users.info({ user })
   const convos = await web.conversations.history({
     channel,
     oldest: DateTime.local().minus({ days: 5 }).toMillis() / 1000,
@@ -46,7 +47,7 @@ export default async (req, res, context) => {
 Date & time: ${DateTime.fromISO(req.body.dateTime)
       .setZone('America/New_York')
       .toFormat('LL/dd/yy ttt')}
-Uploaded by: <@${user}>
+Uploaded by: ${slackUser.user.profile.display_name}
     `,
   })
   console.log()
