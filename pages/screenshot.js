@@ -77,8 +77,22 @@ export default function Screenshot() {
       fromSources: ['local_file_system'],
       uploadInBackground: false,
       disableStorageKey: true,
-      onUploadDone() {
+      onUploadDone(result) {
+        console.log(result)
         setSuccess(true)
+        fetch('/api/screenshot-notify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            screenshot: `https://covid-tracking-project-data.s3.amazonaws.com/${result.filesUploaded[0].key}`,
+            state,
+            dataType,
+            coreDataType,
+            dateTime,
+          }),
+        })
       },
       onFileSelected: (file) => {
         return onFileSelected(file)
