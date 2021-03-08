@@ -21,7 +21,7 @@ export default async (req, res, context) => {
   const slackUser = await web.users.info({ user })
   const convos = await web.conversations.history({
     channel,
-    oldest: DateTime.local().minus({ hours: 1 }).toMillis() / 1000,
+    oldest: DateTime.local().minus({ days: 2 }).toMillis() / 1000,
   })
   let threadTimestamp = false
   convos.messages.forEach((message) => {
