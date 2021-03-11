@@ -8,7 +8,7 @@ export default async (req, res, context) => {
     return
   }
   fetch(
-    process.env.COVID_INTERNAL_PRIVATE_HISTORY_API.replace(
+    `${process.env.COVID_INTERNAL_PRIVATE_HISTORY_API.replace(
       '{state}',
       req.query.state.toLowerCase(),
     )
@@ -18,7 +18,7 @@ export default async (req, res, context) => {
         req.query.production === 'true'
           ? process.env.COVID_INTERNAL_API_PRODUCTION
           : process.env.COVID_INTERNAL_API_STAGING,
-      ),
+      )}?research=true`,
   )
     .then((response) => response.json())
     .then((result) => {
