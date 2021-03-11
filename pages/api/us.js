@@ -15,7 +15,7 @@ export default async (req, res, context) => {
       req.query.production === 'true'
         ? process.env.COVID_INTERNAL_API_PRODUCTION
         : process.env.COVID_INTERNAL_API_STAGING,
-    ) + (req.query.preview ? '?preview=true' : ''),
+    ) + (req.query.preview ? '?research=true&preview=true' : '?research=true'),
   )
     .then((response) => response.json())
     .then((result) => {

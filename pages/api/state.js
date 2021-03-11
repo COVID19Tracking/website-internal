@@ -15,7 +15,7 @@ export default async (req, res, context) => {
         ? process.env.COVID_INTERNAL_API_PRODUCTION
         : process.env.COVID_INTERNAL_API_STAGING,
     ).replace('{state}', req.query.state.toLowerCase()) +
-      (req.query.preview ? '?preview=true' : ''),
+      (req.query.preview ? '?research=true&preview=true' : '?research=true'),
   )
     .then((response) => response.json())
     .then((result) => {
