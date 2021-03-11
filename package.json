@@ -16,6 +16,7 @@
     "antd": "^4.3.3",
     "color": "^3.1.2",
     "crypto-js": "^4.0.0",
+    "elliptic": "^6.5.4",
     "filestack-js": "^3.20.0",
     "filestack-react": "^3.2.1",
     "less": "^3.11.3",
