@@ -164,7 +164,7 @@ export default function Screenshot() {
               <p>
                 Filename:{' '}
                 <code>
-                  /{(<>{dataType}</>)}/{state}/manual/{state}-
+                  /{dataType}/{state}/manual/{state}-
                   {dataType === 'state_screenshots' ? (
                     <>{coreDataType}-</>
                   ) : (
