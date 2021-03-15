@@ -21,7 +21,7 @@ const coreDataTypes = [
 
 export default function Screenshot() {
   let qsState = false
-  let qsDataType = 'taco'
+  let qsDataType = 'state_screenshots'
   let qsSubType = false
 
   if (typeof window !== 'undefined') {
@@ -61,7 +61,7 @@ export default function Screenshot() {
     return {
       ...file,
       name: `${state}-${
-        dataType === 'taco' ? `${coreDataType}-` : `${dataType.toLowerCase()}-`
+        dataType === 'state_screenshots' ? `${coreDataType}-` : `${dataType.toLowerCase()}-`
       }${dateTime.format('YYYYMMDD-HHmmss')}.${suffix}`,
     }
   }
@@ -99,7 +99,7 @@ export default function Screenshot() {
       },
       storeTo: {
         location: 's3',
-        path: `/state_screenshots/${state}/manual/`,
+        path: `/${dataType}/${state}/manual/`,
       },
     }
     filePickerRef.current = client.picker(options)
@@ -140,12 +140,13 @@ export default function Screenshot() {
               onChange={(event) => setDataType(event.target.value)}
               defaultValue={defaultDataType}
             >
-              <Radio value="taco">TACO</Radio>
-              <Radio value="crdt">CRDT</Radio>
-              <Radio value="ltc">LTC</Radio>
+              <Radio value="state_screenshots">TACO</Radio>
+              <Radio value="CRDT">CRDT</Radio>
+              <Radio value="LTC">LTC</Radio>
+              <Radio value="vaccine">Vaccine</Radio>
             </Radio.Group>
           </Form.Item>
-          {dataType === 'taco' && (
+          {dataType === 'state_screenshots' && (
             <Form.Item label="TACO data subtype" name="data-sub-type">
               <Radio.Group
                 onChange={(event) => setCoreDataType(event.target.value)}
@@ -163,8 +164,8 @@ export default function Screenshot() {
               <p>
                 Filename:{' '}
                 <code>
-                  /state_screenshots/{state}/manual/{state}-
-                  {dataType === 'taco' ? (
+                  /{(<>{dataType}</>)}/{state}/manual/{state}-
+                  {dataType === 'state_screenshots' ? (
                     <>{coreDataType}-</>
                   ) : (
                     <>{dataType.toLowerCase()}-</>
