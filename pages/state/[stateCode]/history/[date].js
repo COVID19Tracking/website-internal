@@ -104,10 +104,10 @@ export default () => {
       dataIndex: 'batch__link',
       key: 'batch__link',
       width: 90,
-      render: (note) =>
-        note ? (
+      render: (link) =>
+        link ? (
           <a
-            href="https://github.com/COVID19Tracking/issues/issues/813"
+            href={link}
             target="_blank"
           >
             Link
