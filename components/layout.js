@@ -69,6 +69,11 @@ export default ({ title, margin, children, production, setProduction }) => {
                     </Link>
                   </Menu.Item>
                   <Menu.Item>
+                    <Link href="/avocado">
+                      <a>Avocado</a>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item>
                     <Switch
                       defaultChecked
                       style={{ marginLeft: 0, marginRight: '1rem' }}
@@ -100,7 +105,7 @@ export default ({ title, margin, children, production, setProduction }) => {
               className="site-layout-background"
               style={{
                 padding: 0,
-                margin: margin ? '2rem': 0,
+                margin: margin ? '2rem' : 0,
                 minHeight: 280,
               }}
             >
