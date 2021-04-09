@@ -10,6 +10,7 @@
     "setup": "rm -rf _api || true && git clone --depth 1 https://github.com/COVID19Tracking/covid-public-api.git _api && rm -rf _api/.git"
   },
   "dependencies": {
+    "@google-cloud/bigquery": "^5.5.0",
     "@slack/web-api": "^5.15.0",
     "@zeit/next-less": "^1.0.1",
     "@zeit/next-sass": "^1.0.1",
