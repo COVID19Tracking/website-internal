@@ -16,7 +16,7 @@ FROM latest JOIN \`covid-tracking-project-data.taco.avocado_latest\` avocado_lat
 ON latest.max_date=avocado_latest.date
 AND latest.state=avocado_latest.state
 AND latest.date_used=avocado_latest.date_used
-ORDER BY latest.max_date DESC, latest.state`
+ORDER BY latest.state , latest.max_date DESC`
 
 export default async (req, res, context) => {
   const [job] = await client.createQueryJob({
