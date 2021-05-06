@@ -20,9 +20,7 @@ export default () => {
     if (!stateCode) {
       return
     }
-    fetch(
-      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/info.json`,
-    )
+    fetch(`/public-api/v1/states/${stateCode.toLowerCase()}/info.json`)
       .then((response) => response.json())
       .then((result) => {
         setStateInfo(result)
@@ -40,9 +38,7 @@ export default () => {
       .catch((e) => {
         console.log(e)
       })
-    fetch(
-      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/screenshots.json`,
-    )
+    fetch(`/public-api/v1/states/${stateCode.toLowerCase()}/screenshots.json`)
       .then((response) => response.json())
       .then((result) => {
         setScreenshots(result)

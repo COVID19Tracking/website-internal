@@ -13,3 +13,9 @@
   from="/api-preview/states/daily"
   to="http://internalapi.covidtracking.com/api/v1/public/states/daily"
   status=200
+
+
+[[redirects]]
+  from="/public-api/*"
+  to="https://api.covidtracking.com/:splat"
+  status=200
