@@ -76,7 +76,7 @@ export default () => {
   const [openApi, setOpenApi] = useState(false)
 
   useEffect(() => {
-    fetch('https://api.covidtracking.com/v1/openapi.json')
+    fetch('/public-api/v1/openapi.json')
       .then((response) => response.json())
       .then((result) => {
         setOpenApi(result)

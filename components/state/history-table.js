@@ -284,10 +284,10 @@ export default ({ history, screenshots, state, batchView }) => {
             columns={columns}
             pagination={false}
             style={{
-              maxHeight: "90vh"
+              maxHeight: '90vh',
             }}
             rowKey="date"
-            scroll={{ x: 2300, y: "80vh" }}
+            scroll={{ x: 2300, y: '80vh' }}
             size="small"
           />
           <Modal

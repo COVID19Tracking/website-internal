@@ -182,9 +182,7 @@ export default () => {
     if (!stateCode) {
       return
     }
-    fetch(
-      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/info.json`,
-    )
+    fetch(`/public-api/v1/states/${stateCode.toLowerCase()}/info.json`)
       .then((response) => response.json())
       .then((result) => {
         setStateInfo(result)

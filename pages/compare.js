@@ -78,7 +78,7 @@ export default () => {
   const [preview, setPreview] = useState(false)
 
   useEffect(() => {
-    fetch(`https://api.covidtracking.com/v1/states/daily.json`)
+    fetch(`/public-api/v1/states/daily.json`)
       .then((response) => response.json())
       .then((result) => {
         setCurrent(result)

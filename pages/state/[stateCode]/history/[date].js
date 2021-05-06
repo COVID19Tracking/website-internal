@@ -106,10 +106,7 @@ export default () => {
       width: 90,
       render: (link) =>
         link ? (
-          <a
-            href={link}
-            target="_blank"
-          >
+          <a href={link} target="_blank">
             Link
           </a>
         ) : (
@@ -123,9 +120,7 @@ export default () => {
     if (!stateCode) {
       return
     }
-    fetch(
-      `https://api.covidtracking.com/v1/states/${stateCode.toLowerCase()}/info.json`,
-    )
+    fetch(`/public-api/v1/states/${stateCode.toLowerCase()}/info.json`)
       .then((response) => response.json())
       .then((result) => {
         setStateInfo(result)
